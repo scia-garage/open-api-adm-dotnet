@@ -204,7 +204,7 @@ namespace OpenAPIAndADMDemo
                     IntFor1Db1Combi = rapi.LoadResult(keyIntFor1Db1Combi);
                     if (IntFor1Db1Combi != null)
                     {
-                        // Console.WriteLine(IntFor1Db1Combi.GetTextOutput());
+                        Console.WriteLine(IntFor1Db1Combi.GetTextOutput());
                     }
                     //Results key for reaction on node 1
                     ResultKey keyReactionsSu1 = new ResultKey
