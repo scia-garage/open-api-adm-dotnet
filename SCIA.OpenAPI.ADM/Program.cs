@@ -23,6 +23,7 @@ using SciaTools.Kernel.ModelExchangerExtension.Contracts.Services;
 using ModelExchanger.AnalysisDataModel.Implementation.Repositories;
 using SCIA.OpenAPI;
 using SciaTools.Kernel.ModelExchangerExtension.Contracts.Ioc;
+using Microsoft.Win32;
 using System.Diagnostics;
 
 namespace OpenAPIAndADMDemo
@@ -35,35 +36,51 @@ namespace OpenAPIAndADMDemo
         private static Guid C1Id { get; } = Guid.NewGuid();
         private static string S1Name { get; } = "S1";
 
-        private static string GetAppPath()
+        private static string GetAppPath(string version)
         {
-            //var directory = new DirectoryInfo(Environment.CurrentDirectory);
-            //return directory.Parent.FullName;
-            return @"c:\Program Files\SCIA\Engineer25.0\"; // SEn application installation folder, don't forget run "esa.exe /regserver" from commandline with Admin rights
+            string registryPath = $@"Software\SCIA\ESA\{version}\Admin\Dir";
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
+            {
+                if (key != null)
+                {
+                    object systemValue = key.GetValue("SYSTEM");
+                    if (systemValue != null)
+                    {
+                        return systemValue.ToString();
+                    }
+                }
+            }
+            throw new InvalidOperationException($"Registry key {registryPath} not found.");
         }
 
         /// <summary>
         /// Path to Scia engineer
         /// </summary>
-        static private string SciaEngineerFullPath => GetAppPath();
+        static private string SciaEngineerFullPath => GetAppPath("25.0");
 
 
-        /// <sumamary>
+        /// <summary>
         /// Path to SCIA Engineer temp
         /// </sumamary>
-        static private string SciaEngineerTempPath => GetTempPath();
+        static private string SciaEngineerTempPath => GetTempPath("25.0");
 
-        private static string GetTempPath()
+        private static string GetTempPath(string version)
         {
-            return @"C:\Users\bmarciniec\ESA25.0\Temp\"; // Must be SEn application temp path, run SEn and go to menu: Setup -> Options -> Directories -> Temporary files
-        }
+            string registryPath = $@"Software\SCIA\ESA\{version}\Admin\Dir";
 
-        static private string SciaEngineerProjecTemplate => GetTemplatePath();
-
-        private static string GetTemplatePath()
-        {
-            //Open project in SCIA Engineer on specified path
-            return @"C:\git\scia\open_api_adm\res\OpenAPIEmptyProject.esa";
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
+            {
+                if (key != null)
+                {
+                    object tempValue = key.GetValue("Temp");
+                    if (tempValue != null)
+                    {
+                        return tempValue.ToString();
+                    }
+                }
+            }
+            throw new InvalidOperationException($"Registry key {registryPath} not found.");
         }
 
         static private string AppLogPath => GetThisAppLogPath();
@@ -125,13 +142,7 @@ namespace OpenAPIAndADMDemo
         {
             using (SCIA.OpenAPI.Environment env = new SCIA.OpenAPI.Environment(SciaEngineerFullPath, AppLogPath, "1.0.0.0"))//path to the location of your installation and temp path for logs)
             {
-                //Run SCIA Engineer application
-                bool openedSE = env.RunSCIAEngineer(SCIA.OpenAPI.Environment.GuiMode.ShowWindowShow);
-                if (!openedSE)
-                {
-                    return;
-                }
-                Console.WriteLine($"SEn opened");
+                // Create an empty project file
                 SciaFileGetter fileGetter = new SciaFileGetter();
                 var EsaFile = fileGetter.PrepareBasicEmptyFile(@"C:/TEMP/");//path where the template file "template.esa" is created
                 if (!File.Exists(EsaFile))
@@ -139,8 +150,16 @@ namespace OpenAPIAndADMDemo
                     throw new InvalidOperationException($"File from manifest resource is not created ! Temp: {env.AppTempPath}");
                 }
 
-                //EsaProject proj = env.OpenProject(EsaFile);
-                EsaProject proj = env.OpenProject(SciaEngineerProjecTemplate);
+                //Run SCIA Engineer application
+                bool openedSE = env.RunSCIAEngineer(SCIA.OpenAPI.Environment.GuiMode.ShowWindowShow);
+                if (!openedSE)
+                {
+                    return;
+                }
+                Console.WriteLine($"SEN opened");
+                
+
+                EsaProject proj = env.OpenProject(EsaFile);
                 if (proj == null)
                 {
                     return;
