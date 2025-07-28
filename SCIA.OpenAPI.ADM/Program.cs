@@ -1,4 +1,4 @@
-﻿using ModelExchanger.AnalysisDataModel;
+using ModelExchanger.AnalysisDataModel;
 using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.Libraries;
 using ModelExchanger.AnalysisDataModel.Loads;
@@ -25,122 +25,40 @@ using SCIA.OpenAPI;
 using SciaTools.Kernel.ModelExchangerExtension.Contracts.Ioc;
 using Microsoft.Win32;
 using System.Diagnostics;
+using OpenAPIAndADMDemo.Infrastructure;
+using OpenAPIAndADMDemo.Configuration;
 
 namespace OpenAPIAndADMDemo
 {
     class Program
     {
-        private static Guid LC1Id { get; } = Guid.NewGuid();
-        private static string N1Name { get; } = "N1";
-        private static string B1Name { get; } = "B1";
-        private static Guid C1Id { get; } = Guid.NewGuid();
-        private static string S1Name { get; } = "S1";
-
-        private static string GetAppPath(string version)
-        {
-            string registryPath = $@"Software\SCIA\ESA\{version}\Admin\Dir";
-
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
-            {
-                if (key != null)
-                {
-                    object systemValue = key.GetValue("SYSTEM");
-                    if (systemValue != null)
-                    {
-                        return systemValue.ToString();
-                    }
-                }
-            }
-            throw new InvalidOperationException($"Registry key {registryPath} not found.");
-        }
+        // Infrastructure components
+        private static SciaEnvironmentManager _environmentManager;
+        private static SciaProcessManager _processManager;
+        private static SciaAssemblyResolver _assemblyResolver;
 
         /// <summary>
-        /// Path to Scia engineer
+        /// Initializes the infrastructure components
         /// </summary>
-        static private string SciaEngineerFullPath => GetAppPath("25.0");
-
-
-        /// <summary>
-        /// Path to SCIA Engineer temp
-        /// </sumamary>
-        static private string SciaEngineerTempPath => GetTempPath("25.0");
-
-        private static string GetTempPath(string version)
+        private static void InitializeInfrastructure()
         {
-            string registryPath = $@"Software\SCIA\ESA\{version}\Admin\Dir";
-
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
-            {
-                if (key != null)
-                {
-                    object tempValue = key.GetValue("Temp");
-                    if (tempValue != null)
-                    {
-                        return tempValue.ToString();
-                    }
-                }
-            }
-            throw new InvalidOperationException($"Registry key {registryPath} not found.");
-        }
-
-        static private string AppLogPath => GetThisAppLogPath();
-
-        static private string GetThisAppLogPath()
-        {
-            return @"C:\temp\SCIA_OpenAPI_Logs"; // Folder for storing of log files for this console application
-        }
-
-        private static void DeleteTemp()
-        {
-
-            if (Directory.Exists(SciaEngineerTempPath))
-            {
-                Directory.Delete(SciaEngineerTempPath, true);
-            }
-
-        }
-        private static void KillSCIAEngineerOrphanRuns()
-        {
-
-            foreach (var process in Process.GetProcessesByName("EsaStartupScreen"))
-            {
-                process.Kill();
-                Console.WriteLine($"Kill old EsaStartupScreen!");
-                System.Threading.Thread.Sleep(1000);
-            }
-            foreach (var process in Process.GetProcessesByName("Esa"))
-            {
-                process.Kill();
-                Console.WriteLine($"Kill old SEN!");
-                System.Threading.Thread.Sleep(5000);
-            }
-
+            _environmentManager = new SciaEnvironmentManager(ModelConstants.SciaVersion);
+            _processManager = new SciaProcessManager();
+            _assemblyResolver = new SciaAssemblyResolver(_environmentManager.SciaEngineerFullPath);
+            _assemblyResolver.Initialize();
         }
 
         /// <summary>
-        /// Assembly resolve method has to be call here
+        /// Cleans up infrastructure components
         /// </summary>
-        private static void SciaOpenApiAssemblyResolve()
+        private static void CleanupInfrastructure()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                string dllName = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
-                string dllFullPath = Path.Combine(SciaEngineerFullPath, dllName);
-                if (!File.Exists(dllFullPath))
-                {
-                    //return null;
-                    dllFullPath = Path.Combine(SciaEngineerFullPath, "OpenAPI_dll", dllName);
-                }
-                if (!File.Exists(dllFullPath))
-                {
-                    return null;
-                }
-                return Assembly.LoadFrom(dllFullPath);
-            };
+            _assemblyResolver?.Cleanup();
         }
+
         static void RunSCIAOpenAPI_simple()
         {
-            using (SCIA.OpenAPI.Environment env = new SCIA.OpenAPI.Environment(SciaEngineerFullPath, AppLogPath, "1.0.0.0"))//path to the location of your installation and temp path for logs)
+            using (SCIA.OpenAPI.Environment env = new SCIA.OpenAPI.Environment(_environmentManager.SciaEngineerFullPath, _environmentManager.AppLogPath, ModelConstants.ApplicationVersion))//path to the location of your installation and temp path for logs)
             {
                 // Create an empty project file
                 SciaFileGetter fileGetter = new SciaFileGetter();
@@ -188,9 +106,9 @@ namespace OpenAPIAndADMDemo
                     ResultKey keyIntFor1Db1 = new ResultKey
                     {
                         CaseType = eDsElementType.eDsElementType_LoadCase,
-                        CaseId = LC1Id,
+                        CaseId = ModelConstants.LC1Id,
                         EntityType = eDsElementType.eDsElementType_Beam,
-                        EntityName = B1Name,
+                        EntityName = ModelConstants.B1Name,
                         Dimension = eDimension.eDim_1D,
                         ResultType = eResultType.eFemBeamInnerForces,
                         CoordSystem = eCoordSystem.eCoordSys_Local
@@ -212,9 +130,9 @@ namespace OpenAPIAndADMDemo
                     ResultKey keyIntFor1Db1Combi = new ResultKey
                     {
                         EntityType = eDsElementType.eDsElementType_Beam,
-                        EntityName = B1Name,
+                        EntityName = ModelConstants.B1Name,
                         CaseType = eDsElementType.eDsElementType_Combination,
-                        CaseId = C1Id,
+                        CaseId = ModelConstants.C1Id,
                         Dimension = eDimension.eDim_1D,
                         ResultType = eResultType.eFemBeamInnerForces,
                         CoordSystem = eCoordSystem.eCoordSys_Local
@@ -229,9 +147,9 @@ namespace OpenAPIAndADMDemo
                     ResultKey keyReactionsSu1 = new ResultKey
                     {
                         CaseType = eDsElementType.eDsElementType_LoadCase,
-                        CaseId = LC1Id,
+                        CaseId = ModelConstants.LC1Id,
                         EntityType = eDsElementType.eDsElementType_Node,
-                        EntityName = N1Name,
+                        EntityName = ModelConstants.N1Name,
                         Dimension = eDimension.eDim_reactionsPoint,
                         ResultType = eResultType.eReactionsNodes,
                         CoordSystem = eCoordSystem.eCoordSys_Global
@@ -248,9 +166,9 @@ namespace OpenAPIAndADMDemo
                     ResultKey keyDef2Ds1 = new ResultKey
                     {
                         CaseType = eDsElementType.eDsElementType_LoadCase,
-                        CaseId = LC1Id,
+                        CaseId = ModelConstants.LC1Id,
                         EntityType = eDsElementType.eDsElementType_Slab,
-                        EntityName = S1Name,
+                        EntityName = ModelConstants.S1Name,
                         Dimension = eDimension.eDim_2D,
                         ResultType = eResultType.eFemDeformations,
                         CoordSystem = eCoordSystem.eCoordSys_Local
@@ -335,9 +253,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Beam,
-                            EntityName = B1Name,
+                            EntityName = ModelConstants.B1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_1D,
                             ResultType = eResultType.eFemBeamInnerForces,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -352,9 +270,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Beam,
-                            EntityName = B1Name,
+                            EntityName = ModelConstants.B1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_1D,
                             ResultType = eResultType.eFemBeamDeformation,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -369,9 +287,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Beam,
-                            EntityName = B1Name,
+                            EntityName = ModelConstants.B1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_1D,
                             ResultType = eResultType.eFemBeamRelativeDeformation,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -386,9 +304,9 @@ namespace OpenAPIAndADMDemo
                 //        ResultKey = new ResultKey
                 //        {
                 //            EntityType = eDsElementType.eDsElementType_Beam,
-                //            EntityName = B1Name,
+                //            EntityName = ModelConstants.B1Name,
                 //            CaseType = eDsElementType.eDsElementType_Combination,
-                //            CaseId = C1Id,
+                //            CaseId = ModelConstants.C1Id,
                 //            Dimension = eDimension.eDim_1D,
                 //            ResultType = eResultType.eFemBeamInnerForces,
                 //            CoordSystem = eCoordSystem.eCoordSys_Local
@@ -405,9 +323,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Slab,
-                            EntityName = S1Name,
+                            EntityName = ModelConstants.S1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_2D,
                             ResultType = eResultType.eFemInnerForces,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -422,9 +340,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Slab,
-                            EntityName = S1Name,
+                            EntityName = ModelConstants.S1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_2D,
                             ResultType = eResultType.eFemDeformations,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -439,9 +357,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Slab,
-                            EntityName = S1Name,
+                            EntityName = ModelConstants.S1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_2D,
                             ResultType = eResultType.eFemStress,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -456,9 +374,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Slab,
-                            EntityName = S1Name,
+                            EntityName = ModelConstants.S1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_2D,
                             ResultType = eResultType.eFemStrains,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -473,9 +391,9 @@ namespace OpenAPIAndADMDemo
                         ResultKey = new ResultKey
                         {
                             EntityType = eDsElementType.eDsElementType_Slab,
-                            EntityName = S1Name,
+                            EntityName = ModelConstants.S1Name,
                             CaseType = eDsElementType.eDsElementType_LoadCase,
-                            CaseId = LC1Id,
+                            CaseId = ModelConstants.LC1Id,
                             Dimension = eDimension.eDim_2D,
                             ResultType = eResultType.eFemInnerForces_Extended,
                             CoordSystem = eCoordSystem.eCoordSys_Local
@@ -491,7 +409,7 @@ namespace OpenAPIAndADMDemo
                 //        ResultKey = new ResultKey
                 //        {
                 //            CaseType = eDsElementType.eDsElementType_LoadCase,
-                //            CaseId = Lc1Id,
+                //            CaseId = ModelConstants.LC1Id,
                 //            EntityType = eDsElementType.eDsElementType_Node,
                 //            EntityName = "n1",
                 //            Dimension = eDimension.eDim_reactionsPoint,
@@ -508,7 +426,7 @@ namespace OpenAPIAndADMDemo
                 //        ResultKey = new ResultKey
                 //        {
                 //            CaseType = eDsElementType.eDsElementType_LoadCase,
-                //            CaseId = Lc1Id,
+                //            CaseId = ModelConstants.LC1Id,
                 //            EntityType = eDsElementType.eDsElementType_PointSupportPoint,
                 //            EntityName = "Su1",
                 //            Dimension = eDimension.eDim_reactionsPoint,
@@ -530,7 +448,7 @@ namespace OpenAPIAndADMDemo
                 //            Dimension = eDimension.eDim_reactionsLine,
                 //            CoordSystem = eCoordSystem.eCoordSys_Global,
                 //            CaseType = eDsElementType.eDsElementType_LoadCase,
-                //            CaseId = Lc1Id,
+                //            CaseId = ModelConstants.LC1Id,
                 //            ResultType = eResultType.eResultTypeReactionsSupport1D,
 
                 //        }
@@ -610,7 +528,7 @@ namespace OpenAPIAndADMDemo
             double c = 3.0;
 
 
-            StructuralPointConnection N1 = new StructuralPointConnection(Guid.NewGuid(), N1Name, UnitsNet.Length.FromMeters(0), UnitsNet.Length.FromMeters(0), UnitsNet.Length.FromMeters(0));
+            StructuralPointConnection N1 = new StructuralPointConnection(Guid.NewGuid(), ModelConstants.N1Name, UnitsNet.Length.FromMeters(0), UnitsNet.Length.FromMeters(0), UnitsNet.Length.FromMeters(0));
             addResult = model.CreateAdmObject(N1);
             if (addResult.PartialAddResult.Status != AdmChangeStatus.Ok) { throw HandleErrorResult(addResult); }
             StructuralPointConnection N2 = new StructuralPointConnection(Guid.NewGuid(), "N2", UnitsNet.Length.FromMeters(a), UnitsNet.Length.FromMeters(0), UnitsNet.Length.FromMeters(0));
@@ -635,7 +553,7 @@ namespace OpenAPIAndADMDemo
             addResult = model.CreateAdmObject(N8);
             if (addResult.PartialAddResult.Status != AdmChangeStatus.Ok) { throw HandleErrorResult(addResult); }
             var beamB1lines = new Curve<StructuralPointConnection>[1] { new Curve<StructuralPointConnection>(CurveGeometricalShape.Line, new StructuralPointConnection[2] { N1, N5 }) };
-            StructuralCurveMember B1 = new StructuralCurveMember(Guid.NewGuid(), B1Name, beamB1lines, steelprofile)
+            StructuralCurveMember B1 = new StructuralCurveMember(Guid.NewGuid(), ModelConstants.B1Name, beamB1lines, steelprofile)
             {
                 Behaviour = CurveBehaviour.Standard,
                 SystemLine = CurveAlignment.Centre,
@@ -765,7 +683,7 @@ namespace OpenAPIAndADMDemo
                     new Curve<StructuralPointConnection>(CurveGeometricalShape.Line, new StructuralPointConnection[2] { N7, N8 }),
                     new Curve<StructuralPointConnection>(CurveGeometricalShape.Line, new StructuralPointConnection[2] { N8, N5 })
                 };
-            StructuralSurfaceMember S1 = new StructuralSurfaceMember(Guid.NewGuid(), S1Name, edgecurves, concrete, UnitsNet.Length.FromMeters(thickness))
+            StructuralSurfaceMember S1 = new StructuralSurfaceMember(Guid.NewGuid(), ModelConstants.S1Name, edgecurves, concrete, UnitsNet.Length.FromMeters(thickness))
             {
                 Type = new CSInfrastructure.FlexibleEnum<Member2DType>(Member2DType.Plate),
                 Behaviour = Member2DBehaviour.Isotropic,
@@ -993,7 +911,7 @@ namespace OpenAPIAndADMDemo
             addResult = model.CreateAdmObject(LG1);
             if (addResult.PartialAddResult.Status != AdmChangeStatus.Ok) { throw HandleErrorResult(addResult); }
 
-            StructuralLoadCase LC1 = new StructuralLoadCase(LC1Id, "LC1", ActionType.Variable, LG1, LoadCaseType.Static)
+            StructuralLoadCase LC1 = new StructuralLoadCase(ModelConstants.LC1Id, "LC1", ActionType.Variable, LG1, LoadCaseType.Static)
             {
                 Duration = Duration.Long,
                 //Specification = Specification.Standard
@@ -1116,7 +1034,7 @@ namespace OpenAPIAndADMDemo
             if (addResult.PartialAddResult.Status != AdmChangeStatus.Ok) { throw HandleErrorResult(addResult); }
 
             var Combinations = new StructuralLoadCombinationData[3] { new StructuralLoadCombinationData(LC1, 1.0, 1.5), new StructuralLoadCombinationData(LC2, 1.0, 1.35), new StructuralLoadCombinationData(LC3, 1.0, 1.35) };
-            StructuralLoadCombination C1 = new StructuralLoadCombination(C1Id, "C1", LoadCaseCombinationCategory.AccordingNationalStandard, Combinations)
+            StructuralLoadCombination C1 = new StructuralLoadCombination(ModelConstants.C1Id, "C1", LoadCaseCombinationCategory.AccordingNationalStandard, Combinations)
             {
                 NationalStandard = LoadCaseCombinationStandard.EnUlsSetC
             };
@@ -1145,13 +1063,35 @@ namespace OpenAPIAndADMDemo
 
         static void Main(string[] args)
         {
-            KillSCIAEngineerOrphanRuns();
-            SciaOpenApiAssemblyResolve();
+            try
+            {
+                // Initialize infrastructure
+                InitializeInfrastructure();
+                
+                // Clean up any orphan processes
+                _processManager.KillOrphanRuns();
+                
+                // Clean up temp directory
+                _environmentManager.DeleteTemp();
+                
+                // Run the main example
+                RunSCIAOpenAPI_simple();
 
-            DeleteTemp();
-            RunSCIAOpenAPI_simple();
-
-            //ExcelTest();
+                //ExcelTest();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            }
+            finally
+            {
+                // Clean up infrastructure
+                CleanupInfrastructure();
+                
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+            }
         }
 
         private static void ExcelTest()
