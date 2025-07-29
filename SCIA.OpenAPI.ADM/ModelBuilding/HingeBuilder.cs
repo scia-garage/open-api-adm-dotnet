@@ -143,6 +143,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Hinge '{hinge.Name}' (ID: {hinge.Id}) was not successfully created.");
                 }
             }
+    
+            _model.EnforceModelValidity();
+
             Console.WriteLine($"Hinges created in ADM: {_pointHinges.Count} point hinges, {_linearHinges.Count} linear hinges");
         }
     }

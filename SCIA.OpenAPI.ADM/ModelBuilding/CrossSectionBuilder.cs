@@ -88,6 +88,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Cross-section '{section.Name}' (ID: {section.Id}) was not successfully created.");
                 }
             }
+
+            _model.EnforceModelValidity();
+
             Console.WriteLine($"Cross-sections created in ADM: {string.Join(", ", _crossSections.ConvertAll(cs => cs.Name))}");
         }
 

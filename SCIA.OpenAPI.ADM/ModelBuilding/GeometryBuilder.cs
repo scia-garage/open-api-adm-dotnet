@@ -281,6 +281,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Geometry element '{element.Name}' (ID: {element.Id}) was not successfully created.");
                 }
             }
+
+            _model.EnforceModelValidity();
+
             Console.WriteLine($"Geometry created in ADM: {_nodes.Count} nodes, {_beams.Count} beams, {_slabs.Count} slabs, {_regions.Count} regions, {_openings.Count} openings");
         }
         /// <summary>

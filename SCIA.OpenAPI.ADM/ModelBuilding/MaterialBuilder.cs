@@ -65,6 +65,8 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Material '{material.Name}' (ID: {material.Id}) was not successfully created.");
                 }
             }
+            _model.EnforceModelValidity();
+
             Console.WriteLine($"Materials created in ADM: {string.Join(", ", _materials.ConvertAll(m => m.Name))}");
         }
         public static StructuralMaterial FindByName(AnalysisModel model, string name)

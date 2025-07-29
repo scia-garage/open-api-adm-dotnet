@@ -142,6 +142,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Support '{support.Name}' (ID: {support.Id}) was not successfully created.");
                 }
             }
+
+            _model.EnforceModelValidity();
+
             Console.WriteLine($"Supports created in ADM: {_pointSupports.Count} point supports, {_surfaceSupports.Count} surface supports");
         }
     }
