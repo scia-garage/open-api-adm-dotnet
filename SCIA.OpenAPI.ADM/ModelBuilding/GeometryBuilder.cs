@@ -48,7 +48,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public GeometryBuilder AddBeam(string name, string startNodeName, string endNodeName, string crossSectionName, Member1DType beamType, string layer = "Beams")
+        public GeometryBuilder AddLineMember(string name, string startNodeName, string endNodeName, string crossSectionName, Member1DType beamType, string layer = "Beams")
         {
             StructuralPointConnection startNode = _nodes.Find(n => n.Name == startNodeName)
                 ?? throw new ArgumentException($"Start node '{startNodeName}' not found");
@@ -80,7 +80,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public GeometryBuilder AddSlab(string name, string[] nodeNames, string materialName, double thickness, Member2DType slabType = Member2DType.Plate)
+        public GeometryBuilder AddSurfaceMember(string name, string[] nodeNames, string materialName, double thickness, Member2DType slabType = Member2DType.Plate)
         {
             var nodes = new List<StructuralPointConnection>();
             foreach (var nodeName in nodeNames)
@@ -220,19 +220,25 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             AddNode("N8", 0, b, c);
 
             // Columns
-            AddBeam("B1", "N1", "N5", "HEA260", Member1DType.Column, "Columns");
-            AddBeam("B2", "N2", "N6", "HEA260", Member1DType.Column, "Columns");
-            AddBeam("B3", "N3", "N7", "HEA260", Member1DType.Column, "Columns");
-            AddBeam("B4", "N4", "N8", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("B1", "N1", "N5", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("B2", "N2", "N6", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("B3", "N3", "N7", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("B4", "N4", "N8", "HEA260", Member1DType.Column, "Columns");
 
             // Top level beams
-            AddBeam("B5", "N5", "N6", "HEA260", Member1DType.Beam, "Beams");
-            AddBeam("B6", "N6", "N7", "HEA260", Member1DType.Beam, "Beams");
-            AddBeam("B7", "N7", "N8", "HEA260", Member1DType.Beam, "Beams");
-            AddBeam("B8", "N8", "N5", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B5", "N5", "N6", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B6", "N6", "N7", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B7", "N7", "N8", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B8", "N8", "N5", "HEA260", Member1DType.Beam, "Beams");
 
             // Top slab
-            AddSlab("S1", new string[] { "N5", "N6", "N7", "N8" }, "Concrete", 0.3);
+            AddSurfaceMember("S1", new string[] { "N5", "N6", "N7", "N8" }, "Concrete", 0.3, Member2DType.Plate);
+
+            // Bottom slab
+            AddSurfaceMember("S2", new string[] { "N1", "N2", "N3", "N4" }, "Concrete", 0.3);
+
+            // Side wall
+            AddSurfaceMember("S3", new string[] { "N3", "N4", "N8", "N7" }, "Concrete", 0.3, Member2DType.Wall);
 
             // Additional nodes for opening in top slab  
             AddNode("N9", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
@@ -243,10 +249,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             // Opening in top slab
             AddOpening("O1", "S1", new string[] { "N9", "N10", "N11", "N12" });
 
-            // Bottom slab
-            AddSlab("S2", new string[] { "N1", "N2", "N3", "N4" }, "Concrete", 0.3);
-
-            // Additional nodes for the region on bottom slab
+            // Additional nodes for the region with different thickness on bottom slab
             AddNode("N13", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
             AddNode("N14", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
             AddNode("N15", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
