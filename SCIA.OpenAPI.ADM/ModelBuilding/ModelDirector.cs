@@ -63,8 +63,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     .SetupDefaultHinges();
                 hingeBuilder.Build();
 
-                // Step 7: Loads (simplified for now)
-                // TODO: Create LoadBuilder
+                // Step 7: Load Cases and Groups
+                var loadCaseBuilder = new LoadCaseBuilder(admModel, modelService)
+                    .SetupDefaultLoadCases();
+                loadCaseBuilder.Build();
 
                 Console.WriteLine("Model building process completed successfully!");
             }
