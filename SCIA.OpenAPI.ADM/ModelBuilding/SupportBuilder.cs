@@ -3,11 +3,9 @@ using ModelExchanger.AnalysisDataModel.Models;
 using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.StructuralElements;
 using ModelExchanger.AnalysisDataModel.Subtypes;
-using ModelExchanger.AnalysisDataModel.Base;
 using ModelExchanger.AnalysisDataModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnitsNet;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
@@ -129,13 +127,13 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public void Build()
         {
-            var allSupports = new List<StructuralAnalysisObjectBase>();
+            var allSupports = new List<IAnalysisObject>();
             allSupports.AddRange(_pointSupports);
             allSupports.AddRange(_surfaceSupports);
 
             var result = _modelService.AddItemsToModel(_model, allSupports);
 
-            foreach (var support in allSupports)
+            foreach (IAnalysisObject support in allSupports)
             {
                 if (!result.TryGetValue(support.Id, out bool created) || !created)
                 {

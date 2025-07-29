@@ -3,10 +3,10 @@ using ModelExchanger.AnalysisDataModel.Models;
 using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.StructuralElements;
 using ModelExchanger.AnalysisDataModel.Subtypes;
-using ModelExchanger.AnalysisDataModel.Base;
 using System;
 using System.Collections.Generic;
 using UnitsNet;
+using ModelExchanger.AnalysisDataModel;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -85,6 +85,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 ConstraintType.Free, 
                 RotationalStiffness.FromKilonewtonMetersPerRadian(0));
 
+            var fixedRotation = new Constraint<RotationalStiffness?>(
+                ConstraintType.Rigid, 
+                RotationalStiffness.FromKilonewtonMetersPerRadian(1e+10));
+
             var fixedTranslation = new Constraint<ForcePerLength?>(
                 ConstraintType.Rigid, 
                 ForcePerLength.FromKilonewtonsPerMeter(1e+10));
@@ -94,9 +98,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 TranslationX = fixedTranslation,
                 TranslationY = fixedTranslation,
                 TranslationZ = fixedTranslation,
-                RotationX = freeRotation,
+                RotationX = fixedRotation,
                 RotationY = freeRotation,
-                RotationZ = freeRotation
+                RotationZ = fixedRotation
             };
 
             // Add point hinges to one of the top beams
@@ -130,13 +134,13 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public void Build()
         {
-            var allHinges = new List<StructuralAnalysisObjectBase>();
+            var allHinges = new List<IAnalysisObject>();
             allHinges.AddRange(_pointHinges);
             allHinges.AddRange(_linearHinges);
 
             var result = _modelService.AddItemsToModel(_model, allHinges);
 
-            foreach (var hinge in allHinges)
+            foreach (IAnalysisObject hinge in allHinges)
             {
                 if (!result.TryGetValue(hinge.Id, out bool created) || !created)
                 {

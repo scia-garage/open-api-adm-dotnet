@@ -5,6 +5,7 @@ using ModelExchanger.AnalysisDataModel.Libraries;
 using System;
 using System.Collections.Generic;
 using UnitsNet;
+using ModelExchanger.AnalysisDataModel;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -81,7 +82,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         {
             var result = _modelService.AddItemsToModel(_model, _crossSections);
 
-            foreach (var section in _crossSections)
+            foreach (StructuralCrossSection section in _crossSections)
             {
                 if (!result.TryGetValue(section.Id, out bool created) || !created)
                 {
@@ -96,7 +97,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public static StructuralCrossSection FindByName(AnalysisModel model, string sectionName)
         {
-            foreach (var item in model)
+            foreach (IAnalysisObject item in model)
             {
                 if (item is StructuralCrossSection section && section.Name == sectionName)
                 {

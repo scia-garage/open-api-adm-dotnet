@@ -274,7 +274,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
             var result = _modelService.AddItemsToModel(_model, allElements);
 
-            foreach (var element in allElements)
+            foreach (IAnalysisObject element in allElements)
             {
                 if (!result.TryGetValue(element.Id, out bool created) || !created)
                 {
@@ -291,7 +291,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         /// </summary>
         public static IAnalysisObject FindByNameAndType(AnalysisModel model, string name, Type type)
         {
-            foreach (var item in model)
+            foreach (IAnalysisObject item in model)
             {
                 if (item.GetType() == type && item.Name == name)
                 {

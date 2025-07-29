@@ -37,7 +37,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public void Build()
         {
-            var modelInformation = new ModelInformation(
+            ModelInformation modelInformation = new ModelInformation(
                 Guid.NewGuid(),
                 _modelName)
             {

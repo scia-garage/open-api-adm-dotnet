@@ -4,6 +4,7 @@ using ModelExchanger.AnalysisDataModel.Models;
 using ModelExchanger.AnalysisDataModel.Libraries;
 using System;
 using System.Collections.Generic;
+using ModelExchanger.AnalysisDataModel;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -58,7 +59,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         {
             var result = _modelService.AddItemsToModel(_model, _materials);
 
-            foreach (var material in _materials)
+            foreach (StructuralMaterial material in _materials)
             {
                 if (!result.TryGetValue(material.Id, out bool created) || !created)
                 {
@@ -71,7 +72,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
         public static StructuralMaterial FindByName(AnalysisModel model, string name)
         {
-            foreach (var item in model)
+            foreach (IAnalysisObject item in model)
             {
                 if (item is StructuralMaterial material && material.Name == name)
                 {
