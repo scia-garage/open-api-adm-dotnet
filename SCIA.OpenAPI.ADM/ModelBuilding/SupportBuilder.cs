@@ -3,8 +3,11 @@ using ModelExchanger.AnalysisDataModel.Models;
 using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.StructuralElements;
 using ModelExchanger.AnalysisDataModel.Subtypes;
+using ModelExchanger.AnalysisDataModel.Base;
+using ModelExchanger.AnalysisDataModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnitsNet;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
@@ -16,16 +19,18 @@ namespace OpenAPIAndADMDemo.ModelBuilding
     {
         private readonly AnalysisModel _model;
         private readonly IAnalysisModelService _modelService;
-        private readonly List<StructuralPointSupport> _supports;
+        private readonly List<StructuralPointSupport> _pointSupports;
+        private readonly List<StructuralSurfaceConnection> _surfaceSupports;
 
         public SupportBuilder(AnalysisModel model, IAnalysisModelService modelService)
         {
             _model = model;
             _modelService = modelService;
-            _supports = new List<StructuralPointSupport>();
+            _pointSupports = new List<StructuralPointSupport>();
+            _surfaceSupports = new List<StructuralSurfaceConnection>();
         }
 
-        public SupportBuilder AddPointSupport(string name, string nodeName, SupportConstraints constraints)
+        public SupportBuilder AddPointSupport(string name, string nodeName, PointSupportConstraints constraints)
         {
             // Find the node by name in the model
             var node = GeometryBuilder.FindByNameAndType(_model, nodeName, typeof(StructuralPointConnection)) as StructuralPointConnection
@@ -43,7 +48,24 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 TranslationZ = constraints.TranslationZ
             };
 
-            _supports.Add(pointSupport);
+            _pointSupports.Add(pointSupport);
+            
+            return this;
+        }
+
+        public SupportBuilder AddSurfaceSupport(string name, string surfaceName, Subsoil subsoil)
+        {
+            // Find the surface by name in the model
+            var surface = GeometryBuilder.FindByNameAndType(_model, surfaceName, typeof(StructuralSurfaceMember)) as StructuralSurfaceMember
+                ?? throw new ArgumentException($"Surface '{surfaceName}' not found in model for surface support '{name}'");
+
+            var surfaceSupport = new StructuralSurfaceConnection(
+                Guid.NewGuid(),
+                name,
+                surface,
+                subsoil);
+
+            _surfaceSupports.Add(surfaceSupport);
             
             return this;
         }
@@ -63,7 +85,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 ConstraintType.Rigid, 
                 ForcePerLength.FromKilonewtonsPerMeter(1e+10));
 
-            var constraints = new SupportConstraints
+            var constraints = new PointSupportConstraints
             {
                 RotationX = freeRotation,
                 RotationY = fixedRotation,
@@ -78,25 +100,41 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             AddPointSupport("SPS3", "N3", constraints);
             AddPointSupport("SPS4", "N4", constraints);
 
+            // Add surface support with subsoil properties
+            var subsoil = new Subsoil(
+                "Subsoil",
+                SpecificWeight.FromMeganewtonsPerCubicMeter(80.5),
+                SpecificWeight.FromMeganewtonsPerCubicMeter(35.5),
+                SpecificWeight.FromMeganewtonsPerCubicMeter(50),
+                ForcePerLength.FromMeganewtonsPerMeter(15.5),
+                ForcePerLength.FromMeganewtonsPerMeter(10.2)
+            );
+
+            AddSurfaceSupport("SS1", "S2", subsoil);
+
             return this;
         }
 
         public void Build()
         {
-            var result = _modelService.AddItemsToModel(_model, _supports);
+            var allSupports = new List<StructuralAnalysisObjectBase>();
+            allSupports.AddRange(_pointSupports);
+            allSupports.AddRange(_surfaceSupports);
 
-            foreach (var support in _supports)
+            var result = _modelService.AddItemsToModel(_model, allSupports);
+
+            foreach (var support in allSupports)
             {
                 if (!result.TryGetValue(support.Id, out bool created) || !created)
                 {
                     throw new InvalidOperationException($"Error: Support '{support.Name}' (ID: {support.Id}) was not successfully created.");
                 }
             }
-            Console.WriteLine($"Supports created in ADM: {string.Join(", ", _supports.ConvertAll(s => s.Name))}");
+            Console.WriteLine($"Supports created in ADM: {_pointSupports.Count} point supports, {_surfaceSupports.Count} surface supports");
         }
     }
 
-    public class SupportConstraints
+    public class PointSupportConstraints
     {
         public Constraint<RotationalStiffness?> RotationX { get; set; }
         public Constraint<RotationalStiffness?> RotationY { get; set; }
