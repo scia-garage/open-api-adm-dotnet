@@ -1,15 +1,12 @@
 using ModelExchanger.AnalysisDataModel.Contracts;
 using ModelExchanger.AnalysisDataModel.Models;
 using ModelExchanger.AnalysisDataModel.Enums;
-using ModelExchanger.AnalysisDataModel.StructuralElements;
-using ModelExchanger.AnalysisDataModel.Base;
 using ModelExchanger.AnalysisDataModel.Loads;
 using ModelExchanger.AnalysisDataModel;
 using CSInfrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenAPIAndADMDemo.Configuration;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -22,7 +19,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         private readonly IAnalysisModelService _modelService;
         private readonly List<StructuralLoadGroup> _loadGroups;
         private readonly List<StructuralLoadCase> _loadCases;
-        private readonly Dictionary<string, Guid> _loadGroupNameToId;
 
         public LoadCaseBuilder(AnalysisModel model, IAnalysisModelService modelService)
         {
@@ -30,7 +26,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             _modelService = modelService;
             _loadGroups = new List<StructuralLoadGroup>();
             _loadCases = new List<StructuralLoadCase>();
-            _loadGroupNameToId = new Dictionary<string, Guid>();
         }
 
         /// <summary>
@@ -49,7 +44,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             };
 
             _loadGroups.Add(loadGroup);
-            _loadGroupNameToId[name] = groupId;
 
             return this;
         }
@@ -65,22 +59,18 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         /// <param name="id">Optional specific ID for the load case</param>
         /// <returns>LoadCaseBuilder for method chaining</returns>
         public LoadCaseBuilder AddLoadCase(string name, string loadGroupName, ActionType actionType, 
-            LoadCaseType caseType, Duration duration, Guid? id = null)
+            LoadCaseType caseType, Duration duration)
         {
-            if (!_loadGroupNameToId.ContainsKey(loadGroupName))
-            {
-                throw new ArgumentException($"Load group '{loadGroupName}' not found. Add the load group first.");
-            }
-
             // Find the load group object
-            var loadGroup = _loadGroups.FirstOrDefault(lg => lg.Name == loadGroupName);
-            if (loadGroup == null)
-            {
-                throw new ArgumentException($"Load group '{loadGroupName}' not found in the collection.");
-            }
+            var loadGroup = _loadGroups.FirstOrDefault(lg => lg.Name == loadGroupName)
+                ?? throw new ArgumentException($"Load group '{loadGroupName}' not found. Add the load group first.");
 
-            var caseId = id ?? Guid.NewGuid();
-            var loadCase = new StructuralLoadCase(caseId, name, actionType, loadGroup, caseType)
+            var loadCase = new StructuralLoadCase(
+                Guid.NewGuid(),
+                name,
+                actionType,
+                loadGroup,
+                caseType)
             {
                 Duration = duration
             };
@@ -100,25 +90,11 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             AddLoadGroup("LG1", LoadGroupType.Variable, Load.Domestic);
 
             // Add load cases to the group
-            AddLoadCase("LC1", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long, ModelConstants.LC1Id);
+            AddLoadCase("LC1", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
             AddLoadCase("LC2", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
             AddLoadCase("LC3", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
 
             return this;
-        }
-
-        /// <summary>
-        /// Gets the GUID of a load group by name
-        /// </summary>
-        /// <param name="name">Name of the load group</param>
-        /// <returns>GUID of the load group</returns>
-        public Guid GetLoadGroupId(string name)
-        {
-            if (_loadGroupNameToId.TryGetValue(name, out var id))
-            {
-                return id;
-            }
-            throw new ArgumentException($"Load group '{name}' not found.");
         }
 
         /// <summary>
@@ -147,13 +123,13 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             {
                 return; // Nothing to build
             }
-            var loadGroupsAndCases = new List<StructuralAnalysisObjectBase>();
+            List<IAnalysisObject> loadGroupsAndCases = new List<IAnalysisObject>();
             loadGroupsAndCases.AddRange(_loadGroups);
             loadGroupsAndCases.AddRange(_loadCases);
 
             var groupResult = _modelService.AddItemsToModel(_model, loadGroupsAndCases);
 
-            foreach (var loadEntity in loadGroupsAndCases)
+            foreach (IAnalysisObject loadEntity in loadGroupsAndCases)
             {
                 if (!groupResult.TryGetValue(loadEntity.Id, out bool created) || !created)
                 {

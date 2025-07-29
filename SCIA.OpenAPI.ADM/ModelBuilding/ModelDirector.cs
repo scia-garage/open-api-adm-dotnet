@@ -68,6 +68,16 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     .SetupDefaultLoadCases();
                 loadCaseBuilder.Build();
 
+                // Step 8: Loads and Moments
+                var loadBuilder = new LoadBuilder(admModel, modelService)
+                    .SetupDefaultLoads();
+                loadBuilder.Build();
+
+                // Step 9: Load Combinations
+                var loadCombinationBuilder = new LoadCombinationBuilder(admModel, modelService)
+                    .SetupDefaultLoadCombinations();
+                loadCombinationBuilder.Build();
+
                 Console.WriteLine("Model building process completed successfully!");
             }
             admModel.EnforceModelValidity();

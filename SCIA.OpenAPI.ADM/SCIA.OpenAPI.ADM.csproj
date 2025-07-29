@@ -125,6 +125,8 @@
 		<Compile Include="ModelBuilding\SupportBuilder.cs" />
 		<Compile Include="ModelBuilding\HingeBuilder.cs" />
 		<Compile Include="ModelBuilding\LoadCaseBuilder.cs" />
+		<Compile Include="ModelBuilding\LoadBuilder.cs" />
+		<Compile Include="ModelBuilding\LoadCombinationBuilder.cs" />
 		<Compile Include="ModelBuilding\ModelDirector.cs" />
 	</ItemGroup>
 
