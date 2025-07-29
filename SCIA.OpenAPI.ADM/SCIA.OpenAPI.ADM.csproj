@@ -28,6 +28,11 @@
       <HintPath>C:\Program Files\SCIA\Engineer24.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\SCIA\Engineer24.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="ModelExchanger.AnalysisDataModel.Implementation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\SCIA\Engineer24.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Implementation.dll</HintPath>
@@ -112,6 +117,13 @@
 		<Compile Include="Infrastructure\SciaProcessManager.cs" />
 		<Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
 		<Compile Include="Configuration\ModelConstants.cs" />
+		<Compile Include="ModelBuilding\IModelBuilder.cs" />
+		<Compile Include="ModelBuilding\ProjectInformationBuilder.cs" />
+		<Compile Include="ModelBuilding\MaterialBuilder.cs" />
+		<Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
+		<Compile Include="ModelBuilding\GeometryBuilder.cs" />
+		<Compile Include="ModelBuilding\SupportBuilder.cs" />
+		<Compile Include="ModelBuilding\ModelDirector.cs" />
 	</ItemGroup>
 
 
