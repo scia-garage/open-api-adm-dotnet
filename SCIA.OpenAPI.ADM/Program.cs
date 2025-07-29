@@ -83,7 +83,9 @@ namespace OpenAPIAndADMDemo
 
                 proj.Model.RefreshModel_ToSCIAEngineer();
 
-                Console.WriteLine($"My model sent to SEn");
+                Console.WriteLine($"Model sent to SEN.");
+                Console.WriteLine($"Press any key to proceed with calculation.");
+                Console.ReadKey();
 
                 // // Run calculation
                 // proj.RunCalculation();
@@ -188,9 +190,7 @@ namespace OpenAPIAndADMDemo
                 //     }
 
                 // }
-                Console.WriteLine($"Press key to exit");
-                Console.ReadKey();
-                proj.CloseProject(SCIA.OpenAPI.SaveMode.SaveChangesNo);
+                proj.CloseProject(SaveMode.SaveChangesNo);
                 env.Dispose();
             }
         }

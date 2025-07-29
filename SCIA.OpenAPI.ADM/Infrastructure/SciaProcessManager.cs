@@ -14,24 +14,23 @@ namespace OpenAPIAndADMDemo.Infrastructure
         /// </summary>
         public void KillOrphanRuns()
         {
-            KillProcessesByName("EsaStartupScreen", "Kill old EsaStartupScreen!", 1000);
-            KillProcessesByName("Esa", "Kill old SEN!", 5000);
+            KillProcessesByName("EsaStartupScreen", 1000);
+            KillProcessesByName("Esa", 5000);
         }
 
         /// <summary>
         /// Kills all processes with the specified name
         /// </summary>
         /// <param name="processName">Name of the process to kill</param>
-        /// <param name="message">Message to display when killing processes</param>
         /// <param name="delayMs">Delay in milliseconds after killing processes</param>
-        private void KillProcessesByName(string processName, string message, int delayMs)
+        private void KillProcessesByName(string processName,int delayMs)
         {
             foreach (var process in Process.GetProcessesByName(processName))
             {
                 try
                 {
                     process.Kill();
-                    Console.WriteLine(message);
+                    Console.WriteLine($"Killed process {processName}, which was running in the background.");
                     Thread.Sleep(delayMs);
                 }
                 catch (Exception ex)
