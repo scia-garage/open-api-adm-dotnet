@@ -43,6 +43,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             {
                 RotationX = constraints.RotationX,
                 RotationY = constraints.RotationY,
+                RotationZ = constraints.RotationZ,
                 TranslationX = constraints.TranslationX,
                 TranslationY = constraints.TranslationY,
                 TranslationZ = constraints.TranslationZ
@@ -85,22 +86,33 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 ConstraintType.Rigid, 
                 ForcePerLength.FromKilonewtonsPerMeter(1e+10));
 
-            var constraints = new PointSupportConstraints
+            var freeXRotationContraint = new PointSupportConstraints
             {
                 RotationX = freeRotation,
                 RotationY = fixedRotation,
+                RotationZ = fixedRotation,
+                TranslationX = fixedTranslation,
+                TranslationY = fixedTranslation,
+                TranslationZ = fixedTranslation
+            };
+            var allFixedConstraint = new PointSupportConstraints
+            {
+                RotationX = fixedRotation,
+                RotationY = fixedRotation,
+                RotationZ = fixedRotation,
                 TranslationX = fixedTranslation,
                 TranslationY = fixedTranslation,
                 TranslationZ = fixedTranslation
             };
 
-            // Add the four point supports from the original code
-            AddPointSupport("SPS1", "N1", constraints);
-            AddPointSupport("SPS2", "N2", constraints);
-            AddPointSupport("SPS3", "N3", constraints);
-            AddPointSupport("SPS4", "N4", constraints);
+            // Add the point supports under the columns
+            AddPointSupport("PS1", "N1", freeXRotationContraint);
+            AddPointSupport("PS2", "N2", freeXRotationContraint);
+            AddPointSupport("PS3", "N3", freeXRotationContraint);
+            AddPointSupport("PS4", "N4", freeXRotationContraint);
+            AddPointSupport("PS5", "N5", allFixedConstraint);
 
-            // Add surface support with subsoil properties
+            // Add surface support under the bottom slab
             var subsoil = new Subsoil(
                 "Subsoil",
                 SpecificWeight.FromMeganewtonsPerCubicMeter(80.5),

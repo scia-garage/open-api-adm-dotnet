@@ -58,7 +58,12 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     .SetupDefaultSupports();
                 supportBuilder.Build();
 
-                // Step 6: Loads (simplified for now)
+                // Step 6: Hinges
+                var hingeBuilder = new HingeBuilder(admModel, modelService)
+                    .SetupDefaultHinges();
+                hingeBuilder.Build();
+
+                // Step 7: Loads (simplified for now)
                 // TODO: Create LoadBuilder
 
                 Console.WriteLine("Model building process completed successfully!");

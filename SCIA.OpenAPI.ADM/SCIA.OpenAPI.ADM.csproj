@@ -123,6 +123,7 @@
 		<Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
 		<Compile Include="ModelBuilding\GeometryBuilder.cs" />
 		<Compile Include="ModelBuilding\SupportBuilder.cs" />
+		<Compile Include="ModelBuilding\HingeBuilder.cs" />
 		<Compile Include="ModelBuilding\ModelDirector.cs" />
 	</ItemGroup>
 

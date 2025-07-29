@@ -212,51 +212,53 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             AddNode("N2", a, 0, 0);
             AddNode("N3", a, b, 0);
             AddNode("N4", 0, b, 0);
+            AddNode("N5", 2*a, 0, 0);
 
             // Top level nodes
-            AddNode("N5", 0, 0, c);
-            AddNode("N6", a, 0, c);
-            AddNode("N7", a, b, c);
-            AddNode("N8", 0, b, c);
+            AddNode("N11", 0, 0, c);
+            AddNode("N12", a, 0, c);
+            AddNode("N13", a, b, c);
+            AddNode("N14", 0, b, c);
+            AddNode("N15", 2*a, 0, c);
 
             // Columns
-            AddLineMember("B1", "N1", "N5", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("B2", "N2", "N6", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("B3", "N3", "N7", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("B4", "N4", "N8", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("C1", "N1", "N11", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("C2", "N2", "N12", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("C3", "N3", "N13", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("C4", "N4", "N14", "HEA260", Member1DType.Column, "Columns");
+            AddLineMember("C5", "N5", "N15", "HEA260", Member1DType.Column, "Columns");
 
             // Top level beams
-            AddLineMember("B5", "N5", "N6", "HEA260", Member1DType.Beam, "Beams");
-            AddLineMember("B6", "N6", "N7", "HEA260", Member1DType.Beam, "Beams");
-            AddLineMember("B7", "N7", "N8", "HEA260", Member1DType.Beam, "Beams");
-            AddLineMember("B8", "N8", "N5", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B1", "N11", "N12", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B2", "N13", "N14", "HEA260", Member1DType.Beam, "Beams");
+            AddLineMember("B3", "N12", "N15", "HEA260", Member1DType.Beam, "Beams");
 
             // Top slab
-            AddSurfaceMember("S1", new string[] { "N5", "N6", "N7", "N8" }, "Concrete", 0.3, Member2DType.Plate);
+            AddSurfaceMember("S1", new string[] { "N11", "N12", "N13", "N14" }, "Concrete", 0.3, Member2DType.Plate);
 
             // Bottom slab
             AddSurfaceMember("S2", new string[] { "N1", "N2", "N3", "N4" }, "Concrete", 0.3);
 
             // Side wall
-            AddSurfaceMember("S3", new string[] { "N3", "N4", "N8", "N7" }, "Concrete", 0.3, Member2DType.Wall);
+            AddSurfaceMember("S3", new string[] { "N3", "N4", "N14", "N13" }, "Concrete", 0.3, Member2DType.Wall);
 
             // Additional nodes for opening in top slab  
-            AddNode("N9", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
-            AddNode("N10", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
-            AddNode("N11", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
-            AddNode("N12", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
+            AddNode("N101", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
+            AddNode("N102", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
+            AddNode("N103", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
+            AddNode("N104", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
 
             // Opening in top slab
-            AddOpening("O1", "S1", new string[] { "N9", "N10", "N11", "N12" });
+            AddOpening("O1", "S1", new string[] { "N101", "N102", "N103", "N104" });
 
             // Additional nodes for the region with different thickness on bottom slab
-            AddNode("N13", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
-            AddNode("N14", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
-            AddNode("N15", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
-            AddNode("N16", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
+            AddNode("N111", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
+            AddNode("N112", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
+            AddNode("N113", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
+            AddNode("N114", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
 
             // Region on bottom slab with different thickness
-            AddRegion("Region", "S2", new string[] { "N13", "N14", "N15", "N16" }, "Concrete", 0.6);
+            AddRegion("Region", "S2", new string[] { "N111", "N112", "N113", "N114" }, "Concrete", 0.6);
 
             return this;
         }
