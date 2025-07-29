@@ -22,6 +22,8 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         private readonly List<StructuralPointConnection> _nodes;
         private readonly List<StructuralCurveMember> _beams;
         private readonly List<StructuralSurfaceMember> _slabs;
+        private readonly List<StructuralSurfaceMemberRegion> _regions;
+        private readonly List<StructuralSurfaceMemberOpening> _openings;
 
         public GeometryBuilder(AnalysisModel model, IAnalysisModelService modelService)
         {
@@ -30,6 +32,8 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             _nodes = new List<StructuralPointConnection>();
             _beams = new List<StructuralCurveMember>();
             _slabs = new List<StructuralSurfaceMember>();
+            _regions = new List<StructuralSurfaceMemberRegion>();
+            _openings = new List<StructuralSurfaceMemberOpening>();
         }
 
         public GeometryBuilder AddNode(string name, double x, double y, double z)
@@ -115,10 +119,93 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
+        public GeometryBuilder AddRegion(string name, string parentSlabName, string[] nodeNames, string materialName, double thickness, Member2DAlignment alignment = Member2DAlignment.Centre)
+        {
+            // Find the parent slab
+            var parentSlab = _slabs.Find(s => s.Name == parentSlabName)
+                ?? throw new ArgumentException($"Parent slab '{parentSlabName}' not found");
+
+            // Find the nodes for the region
+            var nodes = new List<StructuralPointConnection>();
+            foreach (var nodeName in nodeNames)
+            {
+                var node = _nodes.Find(n => n.Name == nodeName)
+                    ?? throw new ArgumentException($"Node '{nodeName}' not found for region '{name}'");
+                nodes.Add(node);
+            }
+
+            // Find the material
+            StructuralMaterial material = MaterialBuilder.FindByName(_model, materialName)
+                ?? throw new ArgumentException($"Material '{materialName}' not found for region '{name}'");
+
+            // Create edge curves for the region
+            var regionEdges = new Curve<StructuralPointConnection>[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var nextIndex = (i + 1) % nodes.Count;
+                regionEdges[i] = new Curve<StructuralPointConnection>(
+                    CurveGeometricalShape.Line,
+                    new StructuralPointConnection[2] { nodes[i], nodes[nextIndex] });
+            }
+
+            var region = new StructuralSurfaceMemberRegion(
+                Guid.NewGuid(),
+                name,
+                parentSlab,
+                regionEdges,
+                material)
+            {
+                Thickness = Length.FromMeters(thickness),
+                Alignment = alignment
+            };
+
+            _regions.Add(region);
+            return this;
+        }
+
+        public GeometryBuilder AddOpening(string name, string parentSlabName, string[] nodeNames)
+        {
+            // Find the parent slab
+            var parentSlab = _slabs.Find(s => s.Name == parentSlabName)
+                ?? throw new ArgumentException($"Parent slab '{parentSlabName}' not found for opening '{name}'");
+
+            // Find the nodes for the opening
+            var nodes = new List<StructuralPointConnection>();
+            foreach (var nodeName in nodeNames)
+            {
+                var node = _nodes.Find(n => n.Name == nodeName)
+                    ?? throw new ArgumentException($"Node '{nodeName}' not found for opening '{name}'");
+                nodes.Add(node);
+            }
+
+            // Create edge curves for the opening
+            var openingEdges = new Curve<StructuralPointConnection>[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var nextIndex = (i + 1) % nodes.Count;
+                openingEdges[i] = new Curve<StructuralPointConnection>(
+                    CurveGeometricalShape.Line,
+                    new StructuralPointConnection[2] { nodes[i], nodes[nextIndex] });
+            }
+
+            var opening = new StructuralSurfaceMemberOpening(
+                Guid.NewGuid(),
+                name,
+                parentSlab,
+                openingEdges);
+
+            _openings.Add(opening);
+            return this;
+        }
+
         public GeometryBuilder SetupDefaultGeometry()
         {
             // Model dimensions
             double a = 4.0, b = 5.0, c = 3.0;
+
+            // Opening dimensions for regions and openings
+            double lengthOpening = 1.0;
+            double widthOpening = 1.0;
 
             // Bottom level nodes
             AddNode("N1", 0, 0, 0);
@@ -147,8 +234,26 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             // Top slab
             AddSlab("S1", new string[] { "N5", "N6", "N7", "N8" }, "Concrete", 0.3);
 
+            // Additional nodes for opening in top slab  
+            AddNode("N9", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
+            AddNode("N10", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
+            AddNode("N11", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
+            AddNode("N12", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
+
+            // Opening in top slab
+            AddOpening("O1", "S1", new string[] { "N9", "N10", "N11", "N12" });
+
             // Bottom slab
             AddSlab("S2", new string[] { "N1", "N2", "N3", "N4" }, "Concrete", 0.3);
+
+            // Additional nodes for the region on bottom slab
+            AddNode("N13", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
+            AddNode("N14", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
+            AddNode("N15", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
+            AddNode("N16", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
+
+            // Region on bottom slab with different thickness
+            AddRegion("Region", "S2", new string[] { "N13", "N14", "N15", "N16" }, "Concrete", 0.6);
 
             return this;
         }
@@ -159,6 +264,8 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             allElements.AddRange(_nodes);
             allElements.AddRange(_beams);
             allElements.AddRange(_slabs);
+            allElements.AddRange(_regions);
+            allElements.AddRange(_openings);
 
             var result = _modelService.AddItemsToModel(_model, allElements);
 
@@ -169,7 +276,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                     throw new InvalidOperationException($"Error: Geometry element '{element.Name}' (ID: {element.Id}) was not successfully created.");
                 }
             }
-            Console.WriteLine($"Geometry created in ADM: {_nodes.Count} nodes, {_beams.Count} beams, {_slabs.Count} slabs");
+            Console.WriteLine($"Geometry created in ADM: {_nodes.Count} nodes, {_beams.Count} beams, {_slabs.Count} slabs, {_regions.Count} regions, {_openings.Count} openings");
         }
         /// <summary>
         /// Finds a geometry element in the model by its name and type
