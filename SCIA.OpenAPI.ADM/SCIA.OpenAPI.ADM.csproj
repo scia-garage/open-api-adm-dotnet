@@ -115,6 +115,7 @@
 		<Compile Include="Program.cs" />
 		<Compile Include="Infrastructure\SciaEnvironmentManager.cs" />
 		<Compile Include="Infrastructure\SciaProcessManager.cs" />
+		<Compile Include="Infrastructure\ProjectManager.cs" />
 		<Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
 		<Compile Include="Configuration\ModelConstants.cs" />
 		<Compile Include="ModelBuilding\IModelBuilder.cs" />

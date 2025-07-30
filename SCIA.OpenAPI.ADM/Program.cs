@@ -58,141 +58,139 @@ namespace OpenAPIAndADMDemo
 
         static void RunSCIAOpenAPI_simple()
         {
-            using (SCIA.OpenAPI.Environment env = new SCIA.OpenAPI.Environment(_environmentManager.SciaEngineerFullPath, _environmentManager.AppLogPath, ModelConstants.ApplicationVersion))//path to the location of your installation and temp path for logs)
+            using (SCIA.OpenAPI.Environment env = new SCIA.OpenAPI.Environment(_environmentManager.SciaEngineerFullPath, _environmentManager.AppLogPath, ModelConstants.ApplicationVersion))
             {
-                // Create an empty project file
-                SciaFileGetter fileGetter = new SciaFileGetter();
-                var EsaFile = fileGetter.PrepareBasicEmptyFile(@"C:/TEMP/");//path where the template file "template.esa" is created
-                if (!File.Exists(EsaFile))
+                // Run SCIA Engineer application
+                if (!env.RunSCIAEngineer(SCIA.OpenAPI.Environment.GuiMode.ShowWindowShow))
                 {
-                    throw new InvalidOperationException($"File from manifest resource is not created ! Temp: {env.AppTempPath}");
-                }
-
-                //Run SCIA Engineer application
-                bool openedSE = env.RunSCIAEngineer(SCIA.OpenAPI.Environment.GuiMode.ShowWindowShow);
-                if (!openedSE)
-                {
+                    Console.WriteLine("Failed to start SCIA Engineer");
                     return;
                 }
 
-                EsaProject proj = env.OpenProject(EsaFile);
-                if (proj == null){ return; }
+                using (var projectManager = new ProjectManager(env))
+                {
+                    // Initialize the project (create template, open project)
+                    if (!projectManager.InitializeEmptyProjectTemplate())
+                    {
+                        Console.WriteLine("Failed to initialize project");
+                        return;
+                    }
 
-                var modelDirector = new ModelDirector(proj.Model);
-                modelDirector.BuildCompleteModel();
+                    var modelDirector = new ModelDirector(projectManager.Project.Model);
+                    modelDirector.BuildCompleteModel();
 
-                proj.Model.RefreshModel_ToSCIAEngineer();
+                    projectManager.Project.Model.RefreshModel_ToSCIAEngineer();
 
+                    // Run calculation
+                    Console.WriteLine($"Calculation started...");
+                    projectManager.Project.RunCalculation();
+                    Console.WriteLine($"Calculation completed.");
 
-                // Run calculation
-                Console.WriteLine($"Calculation started...");
-                proj.RunCalculation();
-                Console.WriteLine($"Calculation completed.");
+                    Console.WriteLine($"Press any key to close SEN.");
+                    Console.ReadKey();
 
-                Console.WriteLine($"Press any key to close SEN.");
-                Console.ReadKey();
+                    // //Initialize Results API
+                    // ResultsAPI rapi = proj.Model.InitializeResultsAPI();
+                    // if (rapi != null)
+                    // {
+                    //     //Create container for 1D results
+                    //     Result IntFor1Db1 = new Result();
+                    //     //Results key for internal forces on beam 1
+                    //     ResultKey keyIntFor1Db1 = new ResultKey
+                    //     {
+                    //         CaseType = eDsElementType.eDsElementType_LoadCase,
+                    //         CaseId = ModelConstants.LC1Id,
+                    //         EntityType = eDsElementType.eDsElementType_Beam,
+                    //         EntityName = ModelConstants.B1Name,
+                    //         Dimension = eDimension.eDim_1D,
+                    //         ResultType = eResultType.eFemBeamInnerForces,
+                    //         CoordSystem = eCoordSystem.eCoordSys_Local
+                    //     };
+                    //     //Load 1D results based on results key
+                    //     IntFor1Db1 = rapi.LoadResult(keyIntFor1Db1);
+                    //     if (IntFor1Db1 != null)
+                    //     {
+                    //         Console.WriteLine(IntFor1Db1.GetTextOutput());
+                    //         var N = IntFor1Db1.GetMagnitudeName(0);
+                    //         var Nvalue = IntFor1Db1.GetValue(0, 0);
+                    //         Console.WriteLine(N);
+                    //         Console.WriteLine(Nvalue);
+                    //     }
+                    //     //combination
+                    //     //Create container for 1D results
+                    //     Result IntFor1Db1Combi = new Result();
+                    //     //Results key for internal forces on beam 1
+                    //     ResultKey keyIntFor1Db1Combi = new ResultKey
+                    //     {
+                    //         EntityType = eDsElementType.eDsElementType_Beam,
+                    //         EntityName = ModelConstants.B1Name,
+                    //         CaseType = eDsElementType.eDsElementType_Combination,
+                    //         CaseId = ModelConstants.C1Id,
+                    //         Dimension = eDimension.eDim_1D,
+                    //         ResultType = eResultType.eFemBeamInnerForces,
+                    //         CoordSystem = eCoordSystem.eCoordSys_Local
+                    //     };
+                    //     // Load 1D results based on results key
+                    //     IntFor1Db1Combi = rapi.LoadResult(keyIntFor1Db1Combi);
+                    //     if (IntFor1Db1Combi != null)
+                    //     {
+                    //         Console.WriteLine(IntFor1Db1Combi.GetTextOutput());
+                    //     }
+                    //     //Results key for reaction on node 1
+                    //     ResultKey keyReactionsSu1 = new ResultKey
+                    //     {
+                    //         CaseType = eDsElementType.eDsElementType_LoadCase,
+                    //         CaseId = ModelConstants.LC1Id,
+                    //         EntityType = eDsElementType.eDsElementType_Node,
+                    //         EntityName = ModelConstants.N1Name,
+                    //         Dimension = eDimension.eDim_reactionsPoint,
+                    //         ResultType = eResultType.eReactionsNodes,
+                    //         CoordSystem = eCoordSystem.eCoordSys_Global
+                    //     };
+                    //     Result reactionsSu1 = new Result();
+                    //     reactionsSu1 = rapi.LoadResult(keyReactionsSu1);
+                    //     if (reactionsSu1 != null)
+                    //     {
+                    //         Console.WriteLine(reactionsSu1.GetTextOutput());
+                    //     }
 
-                // //Initialize Results API
-                // ResultsAPI rapi = proj.Model.InitializeResultsAPI();
-                // if (rapi != null)
-                // {
-                //     //Create container for 1D results
-                //     Result IntFor1Db1 = new Result();
-                //     //Results key for internal forces on beam 1
-                //     ResultKey keyIntFor1Db1 = new ResultKey
-                //     {
-                //         CaseType = eDsElementType.eDsElementType_LoadCase,
-                //         CaseId = ModelConstants.LC1Id,
-                //         EntityType = eDsElementType.eDsElementType_Beam,
-                //         EntityName = ModelConstants.B1Name,
-                //         Dimension = eDimension.eDim_1D,
-                //         ResultType = eResultType.eFemBeamInnerForces,
-                //         CoordSystem = eCoordSystem.eCoordSys_Local
-                //     };
-                //     //Load 1D results based on results key
-                //     IntFor1Db1 = rapi.LoadResult(keyIntFor1Db1);
-                //     if (IntFor1Db1 != null)
-                //     {
-                //         Console.WriteLine(IntFor1Db1.GetTextOutput());
-                //         var N = IntFor1Db1.GetMagnitudeName(0);
-                //         var Nvalue = IntFor1Db1.GetValue(0, 0);
-                //         Console.WriteLine(N);
-                //         Console.WriteLine(Nvalue);
-                //     }
-                //     //combination
-                //     //Create container for 1D results
-                //     Result IntFor1Db1Combi = new Result();
-                //     //Results key for internal forces on beam 1
-                //     ResultKey keyIntFor1Db1Combi = new ResultKey
-                //     {
-                //         EntityType = eDsElementType.eDsElementType_Beam,
-                //         EntityName = ModelConstants.B1Name,
-                //         CaseType = eDsElementType.eDsElementType_Combination,
-                //         CaseId = ModelConstants.C1Id,
-                //         Dimension = eDimension.eDim_1D,
-                //         ResultType = eResultType.eFemBeamInnerForces,
-                //         CoordSystem = eCoordSystem.eCoordSys_Local
-                //     };
-                //     // Load 1D results based on results key
-                //     IntFor1Db1Combi = rapi.LoadResult(keyIntFor1Db1Combi);
-                //     if (IntFor1Db1Combi != null)
-                //     {
-                //         Console.WriteLine(IntFor1Db1Combi.GetTextOutput());
-                //     }
-                //     //Results key for reaction on node 1
-                //     ResultKey keyReactionsSu1 = new ResultKey
-                //     {
-                //         CaseType = eDsElementType.eDsElementType_LoadCase,
-                //         CaseId = ModelConstants.LC1Id,
-                //         EntityType = eDsElementType.eDsElementType_Node,
-                //         EntityName = ModelConstants.N1Name,
-                //         Dimension = eDimension.eDim_reactionsPoint,
-                //         ResultType = eResultType.eReactionsNodes,
-                //         CoordSystem = eCoordSystem.eCoordSys_Global
-                //     };
-                //     Result reactionsSu1 = new Result();
-                //     reactionsSu1 = rapi.LoadResult(keyReactionsSu1);
-                //     if (reactionsSu1 != null)
-                //     {
-                //         Console.WriteLine(reactionsSu1.GetTextOutput());
-                //     }
+                    //     Result Def2Ds1 = new Result();
+                    //     // Results key for internal forces on slab
+                    //     ResultKey keyDef2Ds1 = new ResultKey
+                    //     {
+                    //         CaseType = eDsElementType.eDsElementType_LoadCase,
+                    //         CaseId = ModelConstants.LC1Id,
+                    //         EntityType = eDsElementType.eDsElementType_Slab,
+                    //         EntityName = ModelConstants.S1Name,
+                    //         Dimension = eDimension.eDim_2D,
+                    //         ResultType = eResultType.eFemDeformations,
+                    //         CoordSystem = eCoordSystem.eCoordSys_Local
+                    //     };
 
-                //     Result Def2Ds1 = new Result();
-                //     // Results key for internal forces on slab
-                //     ResultKey keyDef2Ds1 = new ResultKey
-                //     {
-                //         CaseType = eDsElementType.eDsElementType_LoadCase,
-                //         CaseId = ModelConstants.LC1Id,
-                //         EntityType = eDsElementType.eDsElementType_Slab,
-                //         EntityName = ModelConstants.S1Name,
-                //         Dimension = eDimension.eDim_2D,
-                //         ResultType = eResultType.eFemDeformations,
-                //         CoordSystem = eCoordSystem.eCoordSys_Local
-                //     };
+                    //     Def2Ds1 = rapi.LoadResult(keyDef2Ds1);
+                    //     if (Def2Ds1 != null)
+                    //     {
+                    //         Console.WriteLine(Def2Ds1.GetTextOutput());
 
-                //     Def2Ds1 = rapi.LoadResult(keyDef2Ds1);
-                //     if (Def2Ds1 != null)
-                //     {
-                //         Console.WriteLine(Def2Ds1.GetTextOutput());
+                    //         double maxvalue = 0;
+                    //         double pivot;
+                    //         for (int i = 0; i < Def2Ds1.GetMeshElementCount(); i++)
+                    //         {
+                    //             pivot = Def2Ds1.GetValue(2, i);
+                    //             if (System.Math.Abs(pivot) > System.Math.Abs(maxvalue))
+                    //             {
+                    //                 maxvalue = pivot;
 
-                //         double maxvalue = 0;
-                //         double pivot;
-                //         for (int i = 0; i < Def2Ds1.GetMeshElementCount(); i++)
-                //         {
-                //             pivot = Def2Ds1.GetValue(2, i);
-                //             if (System.Math.Abs(pivot) > System.Math.Abs(maxvalue))
-                //             {
-                //                 maxvalue = pivot;
+                    //             }
+                    //         }
+                    //         Console.WriteLine("Maximum deformation on slab:");
+                    //         Console.WriteLine(maxvalue);
+                    //     }
 
-                //             }
-                //         }
-                //         Console.WriteLine("Maximum deformation on slab:");
-                //         Console.WriteLine(maxvalue);
-                //     }
-
-                // }
-                proj.CloseProject(SaveMode.SaveChangesNo);
-                env.Dispose();
+                    // }
+                    
+                    // Project cleanup is handled automatically by ProjectManager.Dispose()
+                }
             }
         }
         // static private object SciaOpenApiWorker(SCIA.OpenAPI.Environment env)
