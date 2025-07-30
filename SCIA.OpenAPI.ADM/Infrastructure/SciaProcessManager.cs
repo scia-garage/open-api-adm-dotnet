@@ -12,7 +12,7 @@ namespace OpenAPIAndADMDemo.Infrastructure
         /// <summary>
         /// Kills any orphaned SCIA Engineer processes
         /// </summary>
-        public void KillOrphanRuns()
+        public static void KillOrphanRuns()
         {
             KillProcessesByName("EsaStartupScreen", 1000);
             KillProcessesByName("Esa", 5000);
@@ -23,7 +23,7 @@ namespace OpenAPIAndADMDemo.Infrastructure
         /// </summary>
         /// <param name="processName">Name of the process to kill</param>
         /// <param name="delayMs">Delay in milliseconds after killing processes</param>
-        private void KillProcessesByName(string processName,int delayMs)
+        private static void KillProcessesByName(string processName,int delayMs)
         {
             foreach (var process in Process.GetProcessesByName(processName))
             {

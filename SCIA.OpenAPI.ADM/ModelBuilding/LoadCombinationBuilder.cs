@@ -93,7 +93,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             };
 
             AddLoadCombination(
-                "C1", 
+                "LComb1", 
                 LoadCaseCombinationCategory.AccordingNationalStandard,
                 loadCaseFactors,
                 LoadCaseCombinationStandard.EnUlsSetC);
