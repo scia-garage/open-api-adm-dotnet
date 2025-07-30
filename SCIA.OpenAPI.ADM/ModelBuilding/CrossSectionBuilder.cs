@@ -27,7 +27,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public CrossSectionBuilder AddManufacturedSection(string name, string materialName, string profileName, FormCode formCode, DescriptionId descriptionId)
         {
-            var material = MaterialBuilder.FindByName(_model, materialName)
+            StructuralMaterial material = MaterialBuilder.FindByName(_model, materialName)
                 ?? throw new ArgumentException($"Material '{materialName}' not found in model for cross-section '{name}'");
 
             _crossSections.Add(new StructuralManufacturedCrossSection(
@@ -43,7 +43,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public CrossSectionBuilder AddParametricSection(string name, string materialName, ProfileLibraryId profileLibrary, Length[] dimensions)
         {
-            var material = MaterialBuilder.FindByName(_model, materialName)
+            StructuralMaterial material = MaterialBuilder.FindByName(_model, materialName)
                 ?? throw new ArgumentException($"Material '{materialName}' not found in model for cross-section '{name}'");
             _crossSections.Add(new StructuralParametricCrossSection(
                 Guid.NewGuid(),
@@ -80,7 +80,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
 
         public void Build()
         {
-            var result = _modelService.AddItemsToModel(_model, _crossSections);
+            IDictionary<Guid, bool> result = _modelService.AddItemsToModel(_model, _crossSections);
 
             foreach (StructuralCrossSection section in _crossSections)
             {
