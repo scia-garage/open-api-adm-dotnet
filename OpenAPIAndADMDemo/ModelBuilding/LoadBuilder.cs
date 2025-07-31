@@ -236,34 +236,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
 
         /// <summary>
-        /// Sets up default loads for the demo model
-        /// </summary>
-        /// <returns>LoadBuilder for method chaining</returns>
-        public LoadBuilder SetupDefaultLoads()
-        {
-            // Line loads on columns
-            AddLineForceOnMember("LL_C1", "C1", "LC1", 5.0, ActionDirection.X);
-            AddLineForceOnMember("LL_C2", "C2", "LC1", -5.0, ActionDirection.Y);
-            AddLineForceOnMember("LL_C5", "C5", "LC1", -5.0, ActionDirection.Y);
-
-            // Edge loads on surface S1
-            AddLineForceOnSurfaceEdge("EL_S1E1", "S1", 0, "LC1", -5.0, ActionDirection.Z);
-            AddLineForceOnSurfaceEdge("EL_S1E3", "S1", 2, "LC1", -5.0, ActionDirection.Z);
-
-            // Surface load on S1
-            AddSurfaceLoad("SL_S1", "S1", "LC2", -7.0, ActionDirection.Z);
-
-            // Point forces
-            AddPointForceOnNode("FP_N15", "N15", "LC2", -150.0, ActionDirection.Z);
-            AddPointForceOnMember("PF_C5", "C5", "LC2", -150.0, ActionDirection.X, 0.5);
-
-            // Line moment
-            AddLineMomentOnMember("LM_B3", "B3", "LC1", -5.0, MomentDirection.Mx);
-
-            return this;
-        }
-
-        /// <summary>
         /// Builds all loads and adds them to the model
         /// </summary>
         public void Build()

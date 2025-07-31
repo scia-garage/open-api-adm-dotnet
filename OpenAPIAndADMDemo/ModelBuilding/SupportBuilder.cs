@@ -28,7 +28,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             _surfaceSupports = new List<StructuralSurfaceConnection>();
         }
 
-        public SupportBuilder AddPointSupport(string name, string nodeName, PointSupportConstraints constraints)
+        public SupportBuilder AddPointSupport(string name, string nodeName, PointConstraints constraints)
         {
             // Find the node by name in the model
             var node = GeometryBuilder.FindByNameAndType(_model, nodeName, typeof(StructuralPointConnection)) as StructuralPointConnection
@@ -69,62 +69,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public SupportBuilder SetupDefaultSupports()
-        {
-            // Define standard constraint values
-            var freeRotation = new Constraint<RotationalStiffness?>(
-                ConstraintType.Free, 
-                RotationalStiffness.FromKilonewtonMetersPerRadian(0));
-
-            var fixedRotation = new Constraint<RotationalStiffness?>(
-                ConstraintType.Rigid, 
-                RotationalStiffness.FromKilonewtonMetersPerRadian(1e+10));
-
-            var fixedTranslation = new Constraint<ForcePerLength?>(
-                ConstraintType.Rigid, 
-                ForcePerLength.FromKilonewtonsPerMeter(1e+10));
-
-            var freeXRotationContraint = new PointSupportConstraints
-            {
-                RotationX = freeRotation,
-                RotationY = fixedRotation,
-                RotationZ = fixedRotation,
-                TranslationX = fixedTranslation,
-                TranslationY = fixedTranslation,
-                TranslationZ = fixedTranslation
-            };
-            var allFixedConstraint = new PointSupportConstraints
-            {
-                RotationX = fixedRotation,
-                RotationY = fixedRotation,
-                RotationZ = fixedRotation,
-                TranslationX = fixedTranslation,
-                TranslationY = fixedTranslation,
-                TranslationZ = fixedTranslation
-            };
-
-            // Add the point supports under the columns
-            AddPointSupport("PS1", "N1", freeXRotationContraint);
-            AddPointSupport("PS2", "N2", freeXRotationContraint);
-            AddPointSupport("PS3", "N3", freeXRotationContraint);
-            AddPointSupport("PS4", "N4", freeXRotationContraint);
-            AddPointSupport("PS5", "N5", allFixedConstraint);
-
-            // Add surface support under the bottom slab
-            var subsoil = new Subsoil(
-                "Subsoil",
-                SpecificWeight.FromMeganewtonsPerCubicMeter(80.5),
-                SpecificWeight.FromMeganewtonsPerCubicMeter(35.5),
-                SpecificWeight.FromMeganewtonsPerCubicMeter(50),
-                ForcePerLength.FromMeganewtonsPerMeter(15.5),
-                ForcePerLength.FromMeganewtonsPerMeter(10.2)
-            );
-
-            AddSurfaceSupport("SS1", "S2", subsoil);
-
-            return this;
-        }
-
         public void Build()
         {
             var allSupports = new List<IAnalysisObject>();
@@ -147,7 +91,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
     }
 
-    public class PointSupportConstraints
+    /// <summary>
+    /// General point constraints that can be used for both supports and hinges
+    /// </summary>
+    public class PointConstraints
     {
         public Constraint<RotationalStiffness?> RotationX { get; set; }
         public Constraint<RotationalStiffness?> RotationY { get; set; }
@@ -155,5 +102,23 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         public Constraint<ForcePerLength?> TranslationX { get; set; }
         public Constraint<ForcePerLength?> TranslationY { get; set; }
         public Constraint<ForcePerLength?> TranslationZ { get; set; }
+    }
+
+    /// <summary>
+    /// General linear constraints that can be used for both surface supports and linear hinges
+    /// </summary>
+    public class LinearConstraints
+    {
+        public Constraint<Pressure?> TranslationX { get; set; }
+        public Constraint<Pressure?> TranslationY { get; set; }
+        public Constraint<Pressure?> TranslationZ { get; set; }
+        public Constraint<RotationalStiffnessPerLength?> RotationX { get; set; }
+    }
+
+    /// <summary>
+    /// Legacy alias for backwards compatibility
+    /// </summary>
+    public class PointSupportConstraints : PointConstraints
+    {
     }
 }

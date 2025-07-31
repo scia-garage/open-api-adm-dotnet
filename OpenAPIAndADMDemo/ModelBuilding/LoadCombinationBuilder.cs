@@ -79,29 +79,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
 
         /// <summary>
-        /// Sets up default load combinations for the demo model
-        /// </summary>
-        /// <returns>LoadCombinationBuilder for method chaining</returns>
-        public LoadCombinationBuilder SetupDefaultLoadCombinations()
-        {
-            // Create a combination with different factors for each load case
-            var loadCaseFactors = new List<LoadCaseFactors>
-            {
-                new LoadCaseFactors("LC1", 1.0, 1.5),
-                new LoadCaseFactors("LC2", 1.0, 1.35),
-                new LoadCaseFactors("LC3", 1.0, 1.35)
-            };
-
-            AddLoadCombination(
-                "LComb1", 
-                LoadCaseCombinationCategory.AccordingNationalStandard,
-                loadCaseFactors,
-                LoadCaseCombinationStandard.EnUlsSetC);
-
-            return this;
-        }
-
-        /// <summary>
         /// Builds all load combinations and adds them to the model
         /// </summary>
         public void Build()

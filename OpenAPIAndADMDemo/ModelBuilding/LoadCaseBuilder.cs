@@ -81,23 +81,6 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
 
         /// <summary>
-        /// Sets up default load groups and cases for the demo model
-        /// </summary>
-        /// <returns>LoadCaseBuilder for method chaining</returns>
-        public LoadCaseBuilder SetupDefaultLoadCases()
-        {
-            // Add default load group
-            AddLoadGroup("LG1", LoadGroupType.Variable, Load.Domestic);
-
-            // Add load cases to the group
-            AddLoadCase("LC1", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
-            AddLoadCase("LC2", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
-            AddLoadCase("LC3", "LG1", ActionType.Variable, LoadCaseType.Static, Duration.Long);
-
-            return this;
-        }
-
-        /// <summary>
         /// Gets the GUID of a load case by name
         /// </summary>
         /// <param name="name">Name of the load case</param>

@@ -28,7 +28,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             _linearHinges = new List<RelConnectsSurfaceEdge>();
         }
 
-        public HingeBuilder AddPointHinge(string name, string memberName, Position position, PointHingeConstraints constraints)
+        public HingeBuilder AddPointHinge(string name, string memberName, Position position, PointConstraints constraints)
         {
             // Find the member by name in the model
             var member = GeometryBuilder.FindByNameAndType(_model, memberName, typeof(StructuralCurveMember)) as StructuralCurveMember
@@ -53,7 +53,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public HingeBuilder AddLinearHinge(string name, string surfaceName, int edgeIndex, double startPointRelative, double endPointRelative, LinearHingeConstraints constraints)
+        public HingeBuilder AddLinearHinge(string name, string surfaceName, int edgeIndex, double startPointRelative, double endPointRelative, LinearConstraints constraints)
         {
             // Find the surface by name in the model
             var surface = GeometryBuilder.FindByNameAndType(_model, surfaceName, typeof(StructuralSurfaceMember)) as StructuralSurfaceMember
@@ -93,7 +93,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 ConstraintType.Rigid, 
                 ForcePerLength.FromKilonewtonsPerMeter(1e+10));
 
-            var pointConstraints = new PointHingeConstraints
+            var pointConstraints = new PointConstraints
             {
                 TranslationX = fixedTranslation,
                 TranslationY = fixedTranslation,
@@ -115,7 +115,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 ConstraintType.Free, 
                 RotationalStiffnessPerLength.FromKilonewtonMetersPerRadianPerMeter(0));
 
-            var freeRotationFixedTranslationConstraint = new LinearHingeConstraints
+            var freeRotationFixedTranslationConstraint = new LinearConstraints
             {
                 TranslationX = fixedTranslationLine,
                 TranslationY = fixedTranslationLine,
@@ -123,11 +123,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
                 RotationX = freeRotationLine
             };
 
-            // Add linear hinges from the original code (assuming S3 surface exists)
-            AddLinearHinge("LH1", "S3", 0, 0, 1, freeRotationFixedTranslationConstraint);
-            // AddLinearHinge("LH2", "S3", 1, 0, 1, linearConstraints);
-            AddLinearHinge("LH3", "S3", 2, 0, 1, freeRotationFixedTranslationConstraint);
-            // AddLinearHinge("LH4", "S3", 3, 0, 1, linearConstraints);
+            // Add linear hinges at the bottom and top of the wall
+            AddLinearHinge("LH1", "W1", 0, 0, 1, freeRotationFixedTranslationConstraint);
+            AddLinearHinge("LH2", "W1", 2, 0, 1, freeRotationFixedTranslationConstraint);
 
             return this;
         }
@@ -154,21 +152,17 @@ namespace OpenAPIAndADMDemo.ModelBuilding
         }
     }
 
-    public class PointHingeConstraints
+    /// <summary>
+    /// Legacy alias for backwards compatibility
+    /// </summary>
+    public class PointHingeConstraints : PointConstraints
     {
-        public Constraint<ForcePerLength?> TranslationX { get; set; }
-        public Constraint<ForcePerLength?> TranslationY { get; set; }
-        public Constraint<ForcePerLength?> TranslationZ { get; set; }
-        public Constraint<RotationalStiffness?> RotationX { get; set; }
-        public Constraint<RotationalStiffness?> RotationY { get; set; }
-        public Constraint<RotationalStiffness?> RotationZ { get; set; }
     }
 
-    public class LinearHingeConstraints
+    /// <summary>
+    /// Legacy alias for backwards compatibility
+    /// </summary>
+    public class LinearHingeConstraints : LinearConstraints
     {
-        public Constraint<Pressure?> TranslationX { get; set; }
-        public Constraint<Pressure?> TranslationY { get; set; }
-        public Constraint<Pressure?> TranslationZ { get; set; }
-        public Constraint<RotationalStiffnessPerLength?> RotationX { get; set; }
     }
 }

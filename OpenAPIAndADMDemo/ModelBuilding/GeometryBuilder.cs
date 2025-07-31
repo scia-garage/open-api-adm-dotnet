@@ -48,6 +48,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
+        /// <summary>
+        /// Adds a line member (beam) to the model.
+        /// /// The beam is defined by its start and end nodes, cross-section, and type.
+        /// </summary>
         public GeometryBuilder AddLineMember(string name, string startNodeName, string endNodeName, string crossSectionName, Member1DType beamType, string layer = "Beams")
         {
             StructuralPointConnection startNode = _nodes.Find(n => n.Name == startNodeName)
@@ -80,6 +84,9 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
+        /// <summary>
+        /// Adds a surface member (slab) to the model.
+        /// </summary>
         public GeometryBuilder AddSurfaceMember(string name, string[] nodeNames, string materialName, double thickness, Member2DType slabType = Member2DType.Plate)
         {
             var nodes = new List<StructuralPointConnection>();
@@ -119,6 +126,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
+        /// <summary>
+        /// Adds a region in a slab
+        /// /// The region is defined by a set of nodes that form the edges of the region.
+        /// </summary>
         public GeometryBuilder AddRegion(string name, string parentSlabName, string[] nodeNames, string materialName, double thickness, Member2DAlignment alignment = Member2DAlignment.Centre)
         {
             // Find the parent slab
@@ -163,6 +174,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
+        /// <summary>
+        /// Adds an opening in a slab
+        /// /// The opening is defined by a set of nodes that form the edges of the opening.
+        /// </summary>
         public GeometryBuilder AddOpening(string name, string parentSlabName, string[] nodeNames)
         {
             // Find the parent slab
@@ -198,71 +213,10 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public GeometryBuilder SetupDefaultGeometry()
-        {
-            // Model dimensions
-            double a = 4.0, b = 5.0, c = 3.0;
-
-            // Opening dimensions for regions and openings
-            double lengthOpening = 1.0;
-            double widthOpening = 1.0;
-
-            // Bottom level nodes
-            AddNode("N1", 0, 0, 0);
-            AddNode("N2", a, 0, 0);
-            AddNode("N3", a, b, 0);
-            AddNode("N4", 0, b, 0);
-            AddNode("N5", 2*a, 0, 0);
-
-            // Top level nodes
-            AddNode("N11", 0, 0, c);
-            AddNode("N12", a, 0, c);
-            AddNode("N13", a, b, c);
-            AddNode("N14", 0, b, c);
-            AddNode("N15", 2*a, 0, c);
-
-            // Columns
-            AddLineMember("C1", "N1", "N11", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("C2", "N2", "N12", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("C3", "N3", "N13", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("C4", "N4", "N14", "HEA260", Member1DType.Column, "Columns");
-            AddLineMember("C5", "N5", "N15", "HEA260", Member1DType.Column, "Columns");
-
-            // Top level beams
-            AddLineMember("B1", "N11", "N12", "HEA260", Member1DType.Beam, "Beams");
-            AddLineMember("B2", "N13", "N14", "HEA260", Member1DType.Beam, "Beams");
-            AddLineMember("B3", "N12", "N15", "HEA260", Member1DType.Beam, "Beams");
-
-            // Top slab
-            AddSurfaceMember("S1", new string[] { "N11", "N12", "N13", "N14" }, "Concrete", 0.3, Member2DType.Plate);
-
-            // Bottom slab
-            AddSurfaceMember("S2", new string[] { "N1", "N2", "N3", "N4" }, "Concrete", 0.3);
-
-            // Side wall
-            AddSurfaceMember("S3", new string[] { "N3", "N4", "N14", "N13" }, "Concrete", 0.3, Member2DType.Wall);
-
-            // Additional nodes for opening in top slab  
-            AddNode("N101", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
-            AddNode("N102", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, c);
-            AddNode("N103", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
-            AddNode("N104", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, c);
-
-            // Opening in top slab
-            AddOpening("O1", "S1", new string[] { "N101", "N102", "N103", "N104" });
-
-            // Additional nodes for the region with different thickness on bottom slab
-            AddNode("N111", 0.5 * a - 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
-            AddNode("N112", 0.5 * a + 0.5 * lengthOpening, 0.5 * b - 0.5 * widthOpening, 0);
-            AddNode("N113", 0.5 * a + 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
-            AddNode("N114", 0.5 * a - 0.5 * lengthOpening, 0.5 * b + 0.5 * widthOpening, 0);
-
-            // Region on bottom slab with different thickness
-            AddRegion("Region", "S2", new string[] { "N111", "N112", "N113", "N114" }, "Concrete", 0.6);
-
-            return this;
-        }
-
+        // <summary>
+        /// Builds the geometry in the ADM model
+        /// /// This method creates all nodes, beams, slabs, regions, and openings defined in the builder.
+        /// </summary>
         public void Build()
         {
             var allElements = new List<IAnalysisObject>();
