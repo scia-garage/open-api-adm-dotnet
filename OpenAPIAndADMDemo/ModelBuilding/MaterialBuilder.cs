@@ -5,6 +5,7 @@ using ModelExchanger.AnalysisDataModel.Libraries;
 using System;
 using System.Collections.Generic;
 using ModelExchanger.AnalysisDataModel;
+using UnitsNet;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -44,14 +45,31 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             return this;
         }
 
-        public MaterialBuilder AddMaterial(string name, MaterialType type, string quality)
+        /// <summary>
+        /// Adds a new material to the model
+        /// </summary>
+        /// <param name="name">Name of the material</param>
+        /// <param name="type">Type of the material</param>
+        /// <param name="quality">Quality of the material</param>
+        /// <param name="EModulus">Young's modulus in GPa</param>
+        /// <param name="GModulus">Shear modulus in GPa</param>
+        /// <param name="poissonRatio">Poisson's ratio</param>
+        /// <param name="density">Density of the material in kg/m³</param>
+        /// <returns>Instance of MaterialBuilder for method chaining</returns>
+        public MaterialBuilder AddMaterial(string name, MaterialType type, string quality, double EModulus, double GModulus, double poissonRatio, double density)
         {
-            _materials.Add(new StructuralMaterial(
+            var newMaterial = new StructuralMaterial(
                 Guid.NewGuid(),
                 name,
                 type,
-                quality
-            ));
+                quality)
+            {
+                EModulus = new Pressure(EModulus, UnitsNet.Units.PressureUnit.Gigapascal),
+                GModulus = new Pressure(GModulus, UnitsNet.Units.PressureUnit.Gigapascal),
+                PoissonCoefficient = poissonRatio,
+                UnitMass = new Density(density, UnitsNet.Units.DensityUnit.KilogramPerCubicMeter)
+            };
+            _materials.Add(newMaterial);
             return this;
         }
 
