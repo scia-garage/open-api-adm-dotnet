@@ -91,7 +91,7 @@ See the [system requirements of SCIA Engineer](https://www.scia.net/en/support/f
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/open_api_adm_dotnet.git
+git clone https://github.com/scia-garage/open_api_adm_dotnet.git
 cd open_api_adm_dotnet
 ```
 
