@@ -15,7 +15,7 @@ namespace OpenAPIAndADMDemo.Infrastructure
         public static void KillOrphanRuns()
         {
             KillProcessesByName("EsaStartupScreen", 1000);
-            KillProcessesByName("Esa", 5000);
+            KillProcessesByName("SciaEngineer", 5000);
         }
 
         /// <summary>
