@@ -2,9 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "Build OpenAPIAndADMDemo",
             "command": "dotnet",
             "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build the project",
             "args": [
                 "build",
                 "${workspaceFolder}/open_api_adm_dotnet.sln"
@@ -12,8 +17,8 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "run",
-            "detail": "Run OpenAPIAndADMDemo example",
+            "label": "Run OpenAPIAndADMDemo",
+            "detail": "Runs the application OpenAPIAndADMDemo.exe",
             "command": "OpenAPIAndADMDemo.exe",
             "type": "process",
             "args": [],
