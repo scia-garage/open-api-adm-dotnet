@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/open_api_adm_dotnet.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run",
+            "detail": "Run OpenAPIAndADMDemo example",
+            "command": "OpenAPIAndADMDemo.exe",
+            "type": "process",
+            "args": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/OpenAPIAndADMDemo/bin/Debug/net48"
+            }
+        }
+    ]
+}

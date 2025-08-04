@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C#: OpenAPIAndADMDemo Debug",
+            "type": "clr",
+            "request": "launch",
+            "program": "${workspaceFolder}/OpenAPIAndADMDemo/bin/Debug/net48/OpenAPIAndADMDemo.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "externalTerminal"
+            // "preLaunchTask": "dotnet: build"  // Uncomment if you want to build before launching
+        }
+    ]
+}
