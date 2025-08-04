@@ -16,9 +16,6 @@ out/
 packages/
 *.nuspec
 
-# Visual Studio Code
-.vscode/
-
 # Rider
 .idea/
 
