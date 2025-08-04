@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCIAOpenAPIAndADMDemo", "SCIAOpenAPIAndADMDemo\SCIAOpenAPIAndADMDemo.csproj", "{E5C77B38-BD3D-CE91-0855-14F212363219}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAPIAndADMDemo", "OpenAPIAndADMDemo\OpenAPIAndADMDemo.csproj", "{92980A6A-D23E-B1C9-DC80-861ED0977DFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,15 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E5C77B38-BD3D-CE91-0855-14F212363219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5C77B38-BD3D-CE91-0855-14F212363219}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5C77B38-BD3D-CE91-0855-14F212363219}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5C77B38-BD3D-CE91-0855-14F212363219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92980A6A-D23E-B1C9-DC80-861ED0977DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92980A6A-D23E-B1C9-DC80-861ED0977DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92980A6A-D23E-B1C9-DC80-861ED0977DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92980A6A-D23E-B1C9-DC80-861ED0977DFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D031FD0F-324D-4799-8F8E-0118B297B8C8}
+		SolutionGuid = {442D6B08-D981-4D0B-9E72-5BCD4AB25C7E}
 	EndGlobalSection
 EndGlobal
