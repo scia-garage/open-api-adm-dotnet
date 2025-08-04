@@ -62,25 +62,25 @@ calculation. Then, results are read and printed in the console.
 
     > [!Note]
     > If SCIA Engineer is not installed in the default location under `C:\Program Files\SCIA\Engineer25.0\`
-    > you have to adapt the DLL paths in _OpenAPIAndADMDemo.csproj_ file!
+    > you have to adapt the DLL paths in _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
 
-2.  **.NET Framework 4.8 targeting pack**
+2.  **.NET Framework 4.8 developer pack**
+    +   Download from: <https://dotnet.microsoft.com/download/dotnet-framework/net48>
+    +   Or use winget: `winget install Microsoft.DotNet.Framework.DeveloperPack_4.8`
 
-    ```shell
-    winget install Microsoft.DotNet.Framework.DeveloperPack_4.8
-    ```
+3.  IDE
 
-3.  **Microsoft Visual Studio 2022**
+    a.  **Microsoft Visual Studio 2022**
 
-    ```shell
-    winget install Microsoft.VisualStudio.2022.Community
-    ```
+    +   Download from: <https://visualstudio.microsoft.com/downloads>
 
-    Or **VS Code** with C# extension
+    +   Or use winget: `winget install Microsoft.VisualStudio.2022.Community`
 
-    ```shell
-    winget install Microsoft.VisualStudioCode
-    ```
+    b.  Or **VS Code** with C# extension
+
+    +   Download from: <https://code.visualstudio.com/download>
+
+    +   or use winget: `winget install Microsoft.VisualStudioCode`
 
 ### System Requirements
 
@@ -90,43 +90,63 @@ See the [system requirements of SCIA Engineer](https://www.scia.net/en/support/f
 
 ### 1. Clone the Repository
 
-```bash
+```shell
 git clone https://github.com/scia-garage/open_api_adm_dotnet.git
 cd open_api_adm_dotnet
 ```
+
+> [!Note]
+> All CLI commands we show below needs to be run in this directory
 
 ### 2. Verify SCIA Engineer Installation
 
 Ensure SCIA Engineer is installed at the default location:
 
 ```shell
-cd "C:\Program Files\SCIA\Engineer25.0"
+if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 ```
 
 > [!Note]
-> If installed elsewhere, you'll need to update the paths in `OpenAPIAndADMDemo.csproj` (see [Configuration](#configuration) section).
+> If installed elsewhere, you'll need to update the paths in `OpenAPIAndADMDemo.csproj`.
 
-### 3. Build the Project
+### 3. Open the project
 
-```bash
-# Using dotnet CLI
-dotnet build OpenAPIAndADMDemo.sln
+-   With VS-Code
 
-# Or using Visual Studio
-# Open the .sln file and build with Ctrl+Shift+B
-```
+    +   Open VS-Code and go to _File -> Open Folder_ and open the _open_api_adm_dotnet_ folder  
+        OR in the CLI type: `code .`
+    +   Wait a couple of secconds for the pop-up about installing extensions recommended for this
+        project to pop up or open the _Extensions_ tab (CTRL+E) and type `@recommended`
+        in the search fiels
+    +   Install all recommended extensions
 
-### 4. Run the Demo
+### 4. Build the Project
 
-```bash
-# From command line
+-   Using CLI
+
+    ```shell
+    dotnet build open_api_adm_dotnet.sln
+    ```
+
+-   Or using VS-Code
+
+    The default build task is defined in the _.vscode/tasks.json_.  
+    Just go to: "Terminal -> Run Build Task" or Press Ctrl+Shift+B
+
+-   Or using Visual Studio
+
+    +   Open the .sln file
+    +   build with Ctrl+Shift+B
+
+The binaries are created in `OpenAPIAndADMDemo/bin/Debug/net48`
+
+### 5. Test the demo application
+
+```shell
 dotnet run --project OpenAPIAndADMDemo
-
-# Or using Visual Studio
-# Set OpenAPIAndADMDemo as startup project and press F5
 ```
 
-### 5. Expected Workflow
+#### Expected Workflow
 
 1.  Console application starts and initializes SCIA Engineer environment
 2.  SCIA Engineer opens automatically
@@ -137,6 +157,15 @@ dotnet run --project OpenAPIAndADMDemo
 7.  Linear analysis is performed
 8.  Results are extracted and displayed in the console
 9.  **Press any key** to close SCIA Engineer
+
+### 6. Debugging
+
+-   Using VS-Code
+
+    The debug configuration is defined in _.vscode/launch.json_. You only need to:
+
+    +   Set a breakpoint anywhere in the code
+    +   Press F5
 
 ## 📁 Project Structure
 
@@ -207,7 +236,7 @@ Replace it with something like:
 
 ### Creating different Geometry
 
-TO build a different structure geometry, modify the calls of `GeometryBuilder` in ModelDirector.cs:
+To build a structural analysis model with a different geometry, modify the calls of `GeometryBuilder` in ModelDirector.cs:
 
 ```csharp
 .AddNode("NewNode", x, y, z);
