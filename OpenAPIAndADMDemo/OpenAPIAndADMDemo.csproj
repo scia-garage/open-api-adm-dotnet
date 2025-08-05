@@ -1,136 +1,131 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-		<Platforms>AnyCPU</Platforms>
+        <Platforms>AnyCPU</Platforms>
     <OutputType>Exe</OutputType>
     <TargetFramework>net48</TargetFramework>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
-	<ItemGroup>
-		<Reference Include="SCIA.OpenAPI">
-			<HintPath>C:\Program Files\SCIA\Engineer25.0\SCIA.OpenAPI.dll</HintPath>
-			<Private>False</Private>
-			<CopyLocal>False</CopyLocal>
-		</Reference>
-      <Reference Include="CSInfrastructure, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\CSInfrastructure.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ModelExchanger.AnalysisDataModel, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ModelExchanger.AnalysisDataModel.Contracts, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ModelExchanger.AnalysisDataModel.Implementation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Implementation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ModelExchanger.Shared.Models, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.Shared.Models.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="SCIA.OpenAPI, Version=19.1.2010.64, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.AdmToAdm.AdmSignalR.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.AdmToAdm.AdmSignalR.Models.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.Common.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Contracts.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.Common.Implementation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Implementation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.Common.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Models.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Contracts.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Integration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Integration.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Models.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnitsNet, Version=3.112.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\UnitsNet.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <ItemGroup>
+        <Reference Include="CSInfrastructure, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\CSInfrastructure.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ModelExchanger.AnalysisDataModel, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ModelExchanger.AnalysisDataModel.Contracts, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ModelExchanger.AnalysisDataModel.Implementation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Implementation.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ModelExchanger.Shared.Models, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.Shared.Models.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SCIA.OpenAPI, Version=19.1.2010.64, Culture=neutral, processorArchitecture=AMD64">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.AdmToAdm.AdmSignalR.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.AdmToAdm.AdmSignalR.Models.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.Common.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Contracts.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.Common.Implementation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Implementation.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.Common.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Models.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Contracts.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Integration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Integration.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Models.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnitsNet, Version=3.112.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\UnitsNet.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="PresentationCore" />
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.configuration" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.Net.Http.WebRequest" />
+        <Reference Include="System.Runtime.Serialization" />
+        <Reference Include="System.Security" />
+        <Reference Include="System.ServiceModel" />
+        <Reference Include="System.Transactions" />
+        <Reference Include="System.Web" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Xml" />
 
-	</ItemGroup>
+    </ItemGroup>
 
 
-	<ItemGroup>
-		<Compile Include="Program.cs" />
-		<Compile Include="Infrastructure\SciaEnvironmentManager.cs" />
-		<Compile Include="Infrastructure\SciaProcessManager.cs" />
-		<Compile Include="Infrastructure\ProjectManager.cs" />
-		<Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
-		<Compile Include="Configuration\ModelConstants.cs" />
-		<Compile Include="ModelBuilding\IModelBuilder.cs" />
-		<Compile Include="ModelBuilding\ProjectInformationBuilder.cs" />
-		<Compile Include="ModelBuilding\MaterialBuilder.cs" />
-		<Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
-		<Compile Include="ModelBuilding\GeometryBuilder.cs" />
-		<Compile Include="ModelBuilding\SupportBuilder.cs" />
-		<Compile Include="ModelBuilding\HingeBuilder.cs" />
-		<Compile Include="ModelBuilding\LoadCaseBuilder.cs" />
-		<Compile Include="ModelBuilding\LoadBuilder.cs" />
-		<Compile Include="ModelBuilding\LoadCombinationBuilder.cs" />
-		<Compile Include="ModelBuilding\ModelDirector.cs" />
-		<Compile Include="Results\ResultsManager.cs" />
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Include="Program.cs" />
+        <Compile Include="Infrastructure\SciaEnvironmentManager.cs" />
+        <Compile Include="Infrastructure\SciaProcessManager.cs" />
+        <Compile Include="Infrastructure\ProjectManager.cs" />
+        <Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
+        <Compile Include="Configuration\ModelConstants.cs" />
+        <Compile Include="ModelBuilding\IModelBuilder.cs" />
+        <Compile Include="ModelBuilding\ProjectInformationBuilder.cs" />
+        <Compile Include="ModelBuilding\MaterialBuilder.cs" />
+        <Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
+        <Compile Include="ModelBuilding\GeometryBuilder.cs" />
+        <Compile Include="ModelBuilding\SupportBuilder.cs" />
+        <Compile Include="ModelBuilding\HingeBuilder.cs" />
+        <Compile Include="ModelBuilding\LoadCaseBuilder.cs" />
+        <Compile Include="ModelBuilding\LoadBuilder.cs" />
+        <Compile Include="ModelBuilding\LoadCombinationBuilder.cs" />
+        <Compile Include="ModelBuilding\ModelDirector.cs" />
+        <Compile Include="Results\ResultsManager.cs" />
+    </ItemGroup>
 
 
 </Project>
