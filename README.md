@@ -101,7 +101,7 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 ```
 
 > [!NOTE]
-> If SCIA Engineer is not installed under this location, you have to adapt the DLL paths in 
+> If SCIA Engineer is not installed under this location, you have to adapt the DLL paths in
 > _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
 
 ### 3. Open the project
@@ -114,6 +114,10 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
         project to pop up or open the _Extensions_ tab (CTRL+E) and type `@recommended`
         in the search field
     +   Install all recommended extensions
+
+-   With Visual Studio
+
+    Simply open the solution file _open_api_adm_dotnet.sln_
 
 ### 4. Build the Project
 
@@ -130,8 +134,7 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 
 -   Or using Visual Studio
 
-    +   Open the .sln file
-    +   Build with Ctrl+Shift+B
+    Build with Ctrl+Shift+B
 
 The binaries are created in `OpenAPIAndADMDemo/bin/Debug/net48`
 
@@ -158,6 +161,11 @@ dotnet run --project OpenAPIAndADMDemo
 -   Using VS-Code
 
     The debug configuration is defined in _.vscode/launch.json_. You only need to:
+
+    +   Set a breakpoint anywhere in the code
+    +   Press F5
+
+-   Using Visual Studio
 
     +   Set a breakpoint anywhere in the code
     +   Press F5
@@ -214,7 +222,7 @@ If SCIA Engineer is installed in a non-standard location, update the paths in `O
 for **each** `<Reference>` item:
 
 ```xml
-<!-- Change this base path -->
+          <!--  Change this base path  -->
 <HintPath>C:\Custom\Path\SCIA\Engineer25.0\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
 ```
 
