@@ -4,39 +4,37 @@ This is an example project demonstrating how to use SCIA Engineer's OpenAPI and 
 to programmatically:
 
 1.  Create a structural analysis model
-2.  Run linera FEM calculation
+2.  Run linear FEM calculation
 3.  Read the FEM calculation results
 
 ## 🎯 Purpose
 
 This example project is designed for both **structural engineers** who want to learn how to automate SCIA
-Engineer workflows using C# and the OpenAPI, as well as professional software developers who wants to use
-SCIA as a background calculation engine for teir projects. It provides a complete working example that
+Engineer workflows using C# and the OpenAPI, as well as professional software developers who want to use
+SCIA as a background calculation engine for their projects. It provides a complete working example that
 creates a 3D structural model, runs calculations, and extracts results programmatically.
 
 ## 🏗️ What This Demo Creates
 
-The example creates a **FEM structure** using Analysis Data Model (ADM) featuring:
+The example utilizes Analysis Data Model (ADM) and Open API to create a **FEM structure** in SCIA Engineer
+featuring:
 
 -   **Materials**: Steel (S355) and Concrete (C30/37)
--   **Cross-sections**: HEA260 steel profiles and 600x300mm concrete sections
+-   **Cross-sections**: HEA260 steel profile and 600x300mm concrete sections
 -   **Structural Elements**:
 
     +   5 steel columns (C1-C5) connecting ground to top level
     +   3 steel beams (B1-B3) at the top level
-    +   2 concrete slabs
-
-        *   top slab (S1) with an opening O1
-        *   bottom slab (S2) with a region qith a different thickness
+    +   2 concrete slabs: top (S1) and bottom (S2)
 
     +   1 concrete wall (W1)
     +   Slab opening (O1) in the top slab
-    +   Variable thickness region in bottom slab
+    +   Region with a different thickness in bottom slab
 
 -   **Supports**:
 
     +   Fixed point supports (PS1-PS4) with free X-rotation at the bottom of columns C1-C4
-    +   Fixed point support (PS5) with at the bottom of column C5
+    +   Fixed point support (PS5) at the bottom of column C5
     +   Surface support (SS1) under the bottom slab with elastic soil parameters
 
 -   **Hinges**:
@@ -60,7 +58,7 @@ calculation. Then, results are read and printed in the console.
 
 1.  [**SCIA Engineer 25.0**](https://www.scia.net/en/scia-engineer/downloads)
 
-    > [!Note]
+    > [!NOTE]
     > If SCIA Engineer is not installed in the default location under `C:\Program Files\SCIA\Engineer25.0\`
     > you have to adapt the DLL paths in _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
 
@@ -95,8 +93,8 @@ git clone https://github.com/scia-garage/open_api_adm_dotnet.git
 cd open_api_adm_dotnet
 ```
 
-> [!Note]
-> All CLI commands we show below needs to be run in this directory
+> [!NOTE]
+> All CLI commands we show below need to be run in this directory
 
 ### 2. Verify SCIA Engineer Installation
 
@@ -106,7 +104,7 @@ Ensure SCIA Engineer is installed at the default location:
 if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 ```
 
-> [!Note]
+> [!NOTE]
 > If installed elsewhere, you'll need to update the paths in `OpenAPIAndADMDemo.csproj`.
 
 ### 3. Open the project
@@ -115,9 +113,9 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 
     +   Open VS-Code and go to _File -> Open Folder_ and open the _open_api_adm_dotnet_ folder  
         OR in the CLI type: `code .`
-    +   Wait a couple of secconds for the pop-up about installing extensions recommended for this
+    +   Wait a couple of seconds for the pop-up about installing extensions recommended for this
         project to pop up or open the _Extensions_ tab (CTRL+E) and type `@recommended`
-        in the search fiels
+        in the search field
     +   Install all recommended extensions
 
 ### 4. Build the Project
@@ -136,7 +134,7 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 -   Or using Visual Studio
 
     +   Open the .sln file
-    +   build with Ctrl+Shift+B
+    +   Build with Ctrl+Shift+B
 
 The binaries are created in `OpenAPIAndADMDemo/bin/Debug/net48`
 
@@ -175,8 +173,8 @@ OpenAPIAndADMDemo/
 ├── Configuration/
 │   └── ModelConstants.cs         # Version and configuration settings
 ├── Infrastructure/
-│   ├── SciaEnvironmentManager.cs # Manger for getting the SCIA installation and temp paths
-│   ├── SciaProcessManager.cs     # Manager for killing orpan runs of SCIA Engineer
+│   ├── SciaEnvironmentManager.cs # Manager for getting the SCIA installation and temp paths
+│   ├── SciaProcessManager.cs     # Manager for killing orphan runs of SCIA Engineer
 │   ├── ProjectManager.cs         # Managing ESA project: creating empty template, opening and closing project in SCIA
 │   └── SciaAssemblyResolver.cs   # DLL loading and resolution
 ├── ModelBuilding/
@@ -227,14 +225,14 @@ for **each** `<Reference>` item:
 
 ### Adding New Materials
 
-In ModelDirector.cs, the call `.SetupDefaultMaterials()` create some basic materials.
+In ModelDirector.cs, the call `.SetupDefaultMaterials()` creates some basic materials.
 Replace it with something like:
 
 ```csharp
 .AddMaterial("Steel_S275", MaterialType.Steel, "S275", 210, 80, 0.3, 7850);
 ```
 
-### Creating different Geometry
+### Creating Different Geometry
 
 To build a structural analysis model with a different geometry, modify the calls of `GeometryBuilder` in ModelDirector.cs:
 
@@ -250,7 +248,7 @@ respectively.
 ### Extracting Additional Results
 
 The results are read in Program.cs using `ResultsManager`. Add additional calls to extract
-mode results. Remember to call `PrintAllResults` at the end
+more results. Remember to call `PrintAllResults` at the end
 
 ```csharp
 // In ResultsManager.cs or create new methods
@@ -265,7 +263,7 @@ ReadMemberStresses("Beam B1 : Stresses : Load case LC1", "LC1", "B1");
 2025-01-23 12:34:56.7890|ERROR|SCIA.OpenAPI.AdmToAdmServiceWrapper|Server start timeout. SCIA Engineer Application must be terminated manually!
 ```
 
-SCIA Engineer didn't started within a timeout.
+SCIA Engineer didn't start within a timeout.
 
 -   Close the demo
 -   After some time, SCIA Engineer will eventually start. Close it.
