@@ -58,10 +58,6 @@ calculation. Then, results are read and printed in the console.
 
 1.  [**SCIA Engineer 25.0**](https://www.scia.net/en/scia-engineer/downloads)
 
-    > [!NOTE]
-    > If SCIA Engineer is not installed in the default location under `C:\Program Files\SCIA\Engineer25.0\`
-    > you have to adapt the DLL paths in _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
-
 2.  **.NET Framework 4.8 developer pack**
     +   Download from: <https://dotnet.microsoft.com/download/dotnet-framework/net48>
     +   Or use winget: `winget install Microsoft.DotNet.Framework.DeveloperPack_4.8`
@@ -105,7 +101,8 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 ```
 
 > [!NOTE]
-> If installed elsewhere, you'll need to update the paths in `OpenAPIAndADMDemo.csproj`.
+> If SCIA Engineer is not installed under this location, you have to adapt the DLL paths in 
+> _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
 
 ### 3. Open the project
 
@@ -251,7 +248,6 @@ The results are read in Program.cs using `ResultsManager`. Add additional calls 
 more results. Remember to call `PrintAllResults` at the end
 
 ```csharp
-// In ResultsManager.cs or create new methods
 ReadMemberStresses("Beam B1 : Stresses : Load case LC1", "LC1", "B1");
 ```
 
@@ -267,14 +263,7 @@ SCIA Engineer didn't start within a timeout.
 
 -   Close the demo
 -   After some time, SCIA Engineer will eventually start. Close it.
--   Try again
-
-### Debug Mode
-
-To see detailed logging, modify `Program.cs`:
-```csharp
-Console.WriteLine("Debug: Model building step completed");
-```
+-   Restart the demo
 
 ## 📚 Additional Resources
 
@@ -287,8 +276,9 @@ Console.WriteLine("Debug: Model building step completed");
 
 This project is provided under the MIT License. See LICENSE file for details.
 
-**Note**: This demo requires a valid SCIA Engineer license. The demo code is free to use, but SCIA
-Engineer software licensing terms apply.
+> [!NOTE]
+> This demo requires a valid SCIA Engineer license. The demo code is free to use, but SCIA
+> Engineer software licensing terms apply.
 
 ## ⚠️ Disclaimer
 
