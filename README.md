@@ -261,7 +261,7 @@ ReadMemberStresses("Beam B1 : Stresses : Load case LC1", "LC1", "B1");
 
 ## 🚨 Troubleshooting
 
-### Common Issues
+### Server timeout
 
 ```shell
 2025-01-23 12:34:56.7890|ERROR|SCIA.OpenAPI.AdmToAdmServiceWrapper|Server start timeout. SCIA Engineer Application must be terminated manually!
@@ -272,6 +272,11 @@ SCIA Engineer didn't start within a timeout.
 -   Close the demo
 -   After some time, SCIA Engineer will eventually start. Close it.
 -   Restart the demo
+
+### Other issues
+
+If you are still not able to start the example, it might help moving the .exe file to the SCIA
+installation folder (by default `C:\Program Files\SCIA\Engineer25.0` )
 
 ## 📚 Additional Resources
 
