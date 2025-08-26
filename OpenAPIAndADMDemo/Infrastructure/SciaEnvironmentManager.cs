@@ -11,7 +11,7 @@ namespace OpenAPIAndADMDemo.Infrastructure
     {
         private readonly string _version;
 
-        public SciaEnvironmentManager(string version = "25.0")
+        public SciaEnvironmentManager(string version)
         {
             _version = version;
         }
