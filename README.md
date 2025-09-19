@@ -85,8 +85,8 @@ See the [system requirements of SCIA Engineer](https://www.scia.net/en/support/f
 ### 1. Clone the Repository
 
 ```shell
-git clone https://github.com/scia-garage/open_api_adm_dotnet.git
-cd open_api_adm_dotnet
+git clone https://github.com/scia-garage/open-api-adm-dotnet.git
+cd open-api-adm-dotnet
 ```
 
 > [!NOTE]
@@ -108,7 +108,7 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 
 -   With VS-Code
 
-    +   Open VS-Code and go to _File -> Open Folder_ and open the _open_api_adm_dotnet_ folder  
+    +   Open VS-Code and go to _File -> Open Folder_ and open the _open-api-adm-dotnet_ folder  
         OR in the CLI type: `code .`
     +   Wait a couple of seconds for the pop-up about installing extensions recommended for this
         project to pop up or open the _Extensions_ tab (CTRL+E) and type `@recommended`
