@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OpenAPIAndADMDemo": {
+      "commandName": "Project",
+      "workingDirectory": "path\\to\\your\\repo\\SEN\\A\\Bin\\Release64"
+    }
+  }
+}
