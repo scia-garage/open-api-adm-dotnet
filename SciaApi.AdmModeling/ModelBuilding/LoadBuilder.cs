@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using UnitsNet;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds various types of structural loads and moments

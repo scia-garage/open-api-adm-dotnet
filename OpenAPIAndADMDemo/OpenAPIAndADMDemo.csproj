@@ -107,22 +107,14 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\SciaApi.Infrastructure\SciaApi.Infrastructure.csproj" />
+        <ProjectReference Include="..\SciaApi.AdmModeling\SciaApi.AdmModeling.csproj" />
+        <ProjectReference Include="..\SciaApi.OpenApi\SciaApi.OpenApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Include="Program.cs" />
-        <Compile Include="Infrastructure\SciaEnvironmentManager.cs" />
-        <Compile Include="Infrastructure\SciaProcessManager.cs" />
-        <Compile Include="Infrastructure\ProjectManager.cs" />
-        <Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
         <Compile Include="Configuration\ModelConstants.cs" />
-        <Compile Include="ModelBuilding\IModelBuilder.cs" />
-        <Compile Include="ModelBuilding\ProjectInformationBuilder.cs" />
-        <Compile Include="ModelBuilding\MaterialBuilder.cs" />
-        <Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
-        <Compile Include="ModelBuilding\GeometryBuilder.cs" />
-        <Compile Include="ModelBuilding\SupportBuilder.cs" />
-        <Compile Include="ModelBuilding\HingeBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadCaseBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadCombinationBuilder.cs" />
         <Compile Include="ModelBuilding\ModelDirector.cs" />
         <Compile Include="Results\ResultsManager.cs" />
     </ItemGroup>

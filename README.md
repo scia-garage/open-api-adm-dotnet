@@ -183,19 +183,18 @@ OpenAPIAndADMDemo/
 │   ├── ProjectManager.cs         # Managing ESA project: creating empty template, opening and closing project in SCIA
 │   └── SciaAssemblyResolver.cs   # DLL loading and resolution
 ├── ModelBuilding/
-│   ├── IModelBuilder.cs          # Builder pattern interface
-│   ├── ModelDirector.cs          # Orchestrates ADM model creation
-│   ├── ProjectInformationBuilder.cs # Project metadata
-│   ├── MaterialBuilder.cs        # Defining materials
-│   ├── CrossSectionBuilder.cs    # Creating 1D-member cross-sections
-│   ├── GeometryBuilder.cs        # It's where FEM model geometry is created
-│   ├── SupportBuilder.cs         # Defining supports
-│   ├── HingeBuilder.cs           # Defining hinges
-│   ├── LoadCaseBuilder.cs        # Load case definitions
-│   ├── LoadBuilder.cs            # Defining point, line and surface loads
-│   └── LoadCombinationBuilder.cs # Load combination definitions
+│   └── ModelDirector.cs          # Orchestrates ADM model creation with the builders from SciaApi.AdmModeling
 └── Results/
     └── ResultsManager.cs         # Results extraction and display
+```
+
+The builder classes (`IModelBuilder`, `MaterialBuilder`, `CrossSectionBuilder`, `GeometryBuilder`, `SupportBuilder`, `HingeBuilder`, `LoadCaseBuilder`, `LoadBuilder`, `LoadCombinationBuilder`, `ModelInformationBuilder`) and the roundtrip helpers live in the SCIA-independent library:
+
+```txt
+SciaApi.AdmModeling/
+├── ModelBuilding/                # Builder pattern classes
+└── Roundtrip/                    # ExistingModelCatalog, RoundtripScenarioBuilder, RoundtripVerifier, ModelValidation
+SciaApi.AdmModeling.SelfCheck/    # Offline check of the builders and roundtrip helpers (no SCIA started)
 ```
 
 ## 🛠️ Configuration

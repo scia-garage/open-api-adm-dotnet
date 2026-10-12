@@ -1,20 +1,44 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
-namespace OpenAPIAndADMDemo.Infrastructure
+namespace SciaApi.Infrastructure
 {
     /// <summary>
     /// Handles assembly resolution for SCIA Engineer OpenAPI assemblies
     /// </summary>
     public class SciaAssemblyResolver
     {
-        private readonly string _sciaEngineerPath;
+        private readonly string[] _searchFolders;
         private bool _isInitialized;
 
+        /// <summary>
+        /// Initializes a resolver that probes the SCIA Engineer folder, then its OpenAPI_dll subfolder
+        /// </summary>
+        /// <param name="sciaEngineerPath">SCIA Engineer installation folder</param>
         public SciaAssemblyResolver(string sciaEngineerPath)
+            : this(sciaEngineerPath, new[] { "OpenAPI_dll" })
         {
-            _sciaEngineerPath = sciaEngineerPath ?? throw new ArgumentNullException(nameof(sciaEngineerPath));
+        }
+
+        /// <summary>
+        /// Initializes a resolver that probes the SCIA Engineer folder, then the given subfolders in order
+        /// </summary>
+        /// <param name="sciaEngineerPath">SCIA Engineer installation folder</param>
+        /// <param name="subFolders">Subfolders of the installation folder, e.g. OpenAPI_dll and dll_calatrava</param>
+        public SciaAssemblyResolver(string sciaEngineerPath, IEnumerable<string> subFolders)
+        {
+            string rootPath = sciaEngineerPath ?? throw new ArgumentNullException(nameof(sciaEngineerPath));
+            if (subFolders == null)
+            {
+                throw new ArgumentNullException(nameof(subFolders));
+            }
+
+            _searchFolders = new[] { rootPath }
+                .Concat(subFolders.Select(subFolder => Path.Combine(rootPath, subFolder)))
+                .ToArray();
         }
 
         /// <summary>
@@ -51,19 +75,22 @@ namespace OpenAPIAndADMDemo.Infrastructure
         {
             try
             {
-                string dllName = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
-                string dllFullPath = Path.Combine(_sciaEngineerPath, dllName);
-                
-                if (!File.Exists(dllFullPath))
-                {
-                    dllFullPath = Path.Combine(_sciaEngineerPath, "OpenAPI_dll", dllName);
-                }
-                
-                if (!File.Exists(dllFullPath))
+                string simpleName = new AssemblyName(args.Name).Name;
+                if (string.IsNullOrEmpty(simpleName) || simpleName.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
                 {
                     return null;
                 }
-                
+
+                string dllName = simpleName + ".dll";
+                string dllFullPath = _searchFolders
+                    .Select(folder => Path.Combine(folder, dllName))
+                    .FirstOrDefault(File.Exists);
+
+                if (dllFullPath == null)
+                {
+                    return null;
+                }
+
                 return Assembly.LoadFrom(dllFullPath);
             }
             catch (Exception ex)

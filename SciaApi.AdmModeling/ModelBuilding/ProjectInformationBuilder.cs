@@ -4,7 +4,7 @@ using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.Models;
 using System;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds project and model information

@@ -1,10 +1,11 @@
 using System;
 using Results64Enums;
 
-using OpenAPIAndADMDemo.Infrastructure;
 using OpenAPIAndADMDemo.Configuration;
 using OpenAPIAndADMDemo.ModelBuilding;
 using OpenAPIAndADMDemo.Results;
+using SciaApi.Infrastructure;
+using SciaApi.OpenApi;
 
 namespace OpenAPIAndADMDemo
 {
@@ -98,8 +99,11 @@ namespace OpenAPIAndADMDemo
                     }
 
                     // Create the model with ADM
-                    var modelDirector = new ModelDirector(projectManager.Project.Model);
-                    modelDirector.BuildCompleteModel();
+                    var modelDirector = new ModelDirector();
+                    var admModel = modelDirector.BuildCompleteModel();
+
+                    // Add the ADM objects to the open project
+                    StructureAdmWriter.AddAll(projectManager.Project.Model, admModel);
 
                     // Send the model to SCIA Engineer
                     projectManager.Project.Model.RefreshModel_ToSCIAEngineer();

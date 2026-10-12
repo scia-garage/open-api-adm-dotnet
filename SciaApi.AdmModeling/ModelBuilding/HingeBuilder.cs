@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnitsNet;
 using ModelExchanger.AnalysisDataModel;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds structural hinges for the model
