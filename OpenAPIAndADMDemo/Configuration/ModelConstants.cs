@@ -6,7 +6,7 @@ namespace OpenAPIAndADMDemo.Configuration
     public static class ModelConstants
     {
         // SCIA Engineer Version
-        public const string SciaVersion = "25.0";
+        public const string SciaVersion = "2027";
 
         // Application Settings
         public const string ApplicationVersion = "1.0.0.0";

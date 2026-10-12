@@ -48,9 +48,20 @@ namespace OpenAPIAndADMDemo
                 CleanupInfrastructure();
 
                 Console.WriteLine("Press any key to exit...");
+                WaitForKey();
+            }
+        }
+        /// <summary>
+        /// Waits for a key press unless the input is redirected (non-interactive run)
+        /// </summary>
+        private static void WaitForKey()
+        {
+            if (!Console.IsInputRedirected)
+            {
                 Console.ReadKey();
             }
         }
+
         private static void InitializeInfrastructure()
         {
             _environmentManager = new SciaEnvironmentManager(ModelConstants.SciaVersion);
@@ -95,7 +106,7 @@ namespace OpenAPIAndADMDemo
 
                     Console.WriteLine($"Model sent to SCIA Engineer");
                     Console.WriteLine($"Press any key to run the calculation.");
-                    Console.ReadKey();
+                    WaitForKey();
 
                     // Run calculation
                     Console.WriteLine($"Calculation started...");
@@ -118,7 +129,7 @@ namespace OpenAPIAndADMDemo
                     }
 
                     Console.WriteLine($"Press any key to close SEN.");
-                    Console.ReadKey();
+                    WaitForKey();
                 }
             }
         }
