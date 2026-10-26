@@ -56,7 +56,8 @@ calculation. Then, results are read and printed in the console.
 
 ### Required Software
 
-1.  [**SCIA Engineer 25.0**](https://www.scia.net/en/scia-engineer/downloads)
+1.  [**SCIA Engineer 2027**](https://www.scia.net/en/scia-engineer/downloads) (the version used for testing; the registry key
+    `HKEY_CURRENT_USER\Software\SCIA\ESA\2027` must exist, i.e. SCIA Engineer must have been started at least once)
 
 2.  **.NET Framework 4.8 developer pack**
     +   Download from: <https://dotnet.microsoft.com/download/dotnet-framework/net48>
@@ -97,12 +98,13 @@ cd open-api-adm-dotnet
 Ensure SCIA Engineer is installed at the default location:
 
 ```shell
-if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
+if exist "C:\Program Files\SCIA\Engineer2027" (echo OK) else (echo Not found)
 ```
 
 > [!NOTE]
-> If SCIA Engineer is not installed under this location, you have to adapt the DLL paths in
-> _OpenAPIAndADMDemo.csproj_ file! See [configuration](#️-configuration).
+> If SCIA Engineer is not installed under this location, pass the installation folder to the build, e.g.
+> `dotnet build open_api_adm_dotnet.sln -p:SciaEngineerDir="D:\SCIA\Engineer2027\"`
+> (see [configuration](#️-configuration)).
 
 ### 3. Open the project
 
@@ -138,6 +140,9 @@ if exist "C:\Program Files\SCIA\Engineer25.0" (echo OK) else (echo Not found)
 
 The binaries are created in `OpenAPIAndADMDemo/bin/Debug/net48`
 
+> [!NOTE]
+> When the console input is redirected (for example in automated runs), the demo skips the "press any key" prompts.
+
 ### 5. Test the demo application
 
 ```shell
@@ -170,6 +175,36 @@ dotnet run --project OpenAPIAndADMDemo
     +   Set a breakpoint anywhere in the code
     +   Press F5
 
+## 🔁 Roundtrip examples: modifying an existing ESA project
+
+Besides the demo above (which creates a new model in an empty project), two further console applications show
+how to **open an existing project, load it as an ADM model, modify it, send it back and save it as a new ESA file**.
+Both add the same test objects: a beam using a cross-section that already exists in the project, a new
+300x500 mm rectangular cross-section (reusing the project's material), a second beam using it, and optionally a
+point hinge (`--with-hinge`). Neither runs a calculation, and the input project is never modified.
+
+| Project | API | Details |
+|---|---|---|
+| [OpenApiAdmSciaEngRoundtrip](OpenApiAdmSciaEngRoundtrip/README.md) | SCIA OpenAPI + ADM | Starts SCIA Engineer, opens a copy of your ESA, refreshes the ADM from SCIA, adds the objects, refreshes SCIA from ADM and saves on close |
+| [SciaApiThirdPartySciaEngRoundtrip](SciaApiThirdPartySciaEngRoundtrip/README.md) | Third Party SDK ADM | Launches SCIA Engineer with a copy of your ESA, reads the ADM through the SDK, sends a partial ADM and uses Save As |
+
+No sample ESA is included in this repository. Use any populated project that contains at least one beam with a
+cross-section and a material, for example:
+
+```shell
+dotnet build open_api_adm_dotnet.sln -c Release
+OpenApiAdmSciaEngRoundtrip\bin\Release\net48\OpenApiAdmSciaEngRoundtrip.exe --input C:\Projects\MyProject.esa --with-hinge
+SciaApiThirdPartySciaEngRoundtrip\bin\Release\net48\SciaApiThirdPartySciaEngRoundtrip.exe --input C:\Projects\MyProject.esa
+```
+
+Close SCIA Engineer before running them. Both can re-open their output with `--inspect-only` to verify it.
+
+> [!NOTE]
+> Projects saved with an older SCIA Engineer version make SCIA ask whether to convert the data (the converted copy
+> cannot be opened by the older version), and some projects trigger the question whether to copy the non-annex
+> settings from the previous National Annex. Always work on copies. Answering **No** to the annex question was the
+> safe choice in our tests.
+
 ## 📁 Project Structure
 
 ```txt
@@ -177,54 +212,58 @@ OpenAPIAndADMDemo/
 ├── Program.cs                    # Main entry point
 ├── Configuration/
 │   └── ModelConstants.cs         # Version and configuration settings
-├── Infrastructure/
-│   ├── SciaEnvironmentManager.cs # Manager for getting the SCIA installation and temp paths
-│   ├── SciaProcessManager.cs     # Manager for killing orphan runs of SCIA Engineer
-│   ├── ProjectManager.cs         # Managing ESA project: creating empty template, opening and closing project in SCIA
-│   └── SciaAssemblyResolver.cs   # DLL loading and resolution
 ├── ModelBuilding/
-│   ├── IModelBuilder.cs          # Builder pattern interface
-│   ├── ModelDirector.cs          # Orchestrates ADM model creation
-│   ├── ProjectInformationBuilder.cs # Project metadata
-│   ├── MaterialBuilder.cs        # Defining materials
-│   ├── CrossSectionBuilder.cs    # Creating 1D-member cross-sections
-│   ├── GeometryBuilder.cs        # It's where FEM model geometry is created
-│   ├── SupportBuilder.cs         # Defining supports
-│   ├── HingeBuilder.cs           # Defining hinges
-│   ├── LoadCaseBuilder.cs        # Load case definitions
-│   ├── LoadBuilder.cs            # Defining point, line and surface loads
-│   └── LoadCombinationBuilder.cs # Load combination definitions
+│   └── ModelDirector.cs          # Orchestrates ADM model creation with the builders from SciaApi.AdmModeling
 └── Results/
     └── ResultsManager.cs         # Results extraction and display
+```
+
+The infrastructure and the builder classes are shared with the roundtrip examples in the following libraries:
+
+```txt
+SciaApi.Infrastructure/           # No SCIA dependency: usable before any SCIA assembly is loaded
+├── SciaEnvironmentManager.cs     # Getting the SCIA installation and temp paths (registry key of the version or explicit root)
+├── SciaProcessManager.cs         # Detecting running SCIA processes, killing orphan runs
+├── SciaAssemblyResolver.cs       # DLL loading and resolution
+└── EsaWorkingCopy.cs             # Safe copy of an input ESA, SHA-256
+SciaApi.AdmModeling/              # Pure ADM, no SCIA.OpenAPI
+├── ModelBuilding/                # Builder pattern classes (IModelBuilder, MaterialBuilder, GeometryBuilder, ...)
+└── Roundtrip/                    # ExistingModelCatalog, RoundtripScenarioBuilder, RoundtripVerifier, ModelValidation
+SciaApi.OpenApi/                  # SCIA.OpenAPI glue
+├── ProjectManager.cs             # Managing ESA project: creating empty template or opening an existing project, closing it
+├── StructureAdmWriter.cs         # Adding ADM objects to the open project (CreateAdmObject)
+└── LoadedAdmAccessor.cs          # Access to the ADM model loaded from SCIA (OpenAPI has no public accessor)
+SciaApi.AdmModeling.SelfCheck/    # Offline check of the builders and roundtrip helpers (no SCIA started)
 ```
 
 ## 🛠️ Configuration
 
 ### SCIA Engineer Version Configuration
 
-The project is configured for SCIA Engineer 25.0. To use a different version:
+The project is configured for SCIA Engineer 2027, installed in `C:\Program Files\SCIA\Engineer2027\`.
+The installation folder is defined once in _Directory.Build.props_ as `SciaEngineerDir` and used by all projects.
+To use a different version or location:
 
-1.  **Update ModelConstants.cs**:
+1.  **Update ModelConstants.cs** - the version is the name of the registry key
+    `HKEY_CURRENT_USER\Software\SCIA\ESA\<version>`:
 
     ```csharp
-    public const string SciaVersion = "24.1"; // Change to your version
+    public const string SciaVersion = "2027"; // Change to your version
     ```
 
-2.  **Update .csproj file** - Replace all instances of `Engineer25.0` with your version:
+2.  **Build with the installation folder** (trailing backslash optional), or change the default in _Directory.Build.props_:
 
-    ```xml
-    <HintPath>C:\Program Files\SCIA\Engineer24.1\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
+    ```shell
+    dotnet build open_api_adm_dotnet.sln -p:SciaEngineerDir="C:\Program Files\SCIA\Engineer2027\"
     ```
+
+The roundtrip examples take `--scia-version <version>` and optionally `--scia-root <folder>` on the command line.
 
 ### Custom Installation Path
 
-If SCIA Engineer is installed in a non-standard location, update the paths in `OpenAPIAndADMDemo.csproj`
-for **each** `<Reference>` item:
-
-```xml
-          <!--  Change this base path  -->
-<HintPath>C:\Custom\Path\SCIA\Engineer25.0\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
-```
+If SCIA Engineer is installed in a non-standard location, pass `-p:SciaEngineerDir=...` to the build as shown
+above and, for the roundtrip examples, `--scia-root` at run time. Individual `<HintPath>` items no longer need
+to be edited.
 
 ## 🧪 Experimenting Guide
 

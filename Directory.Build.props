@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- SCIA Engineer installation folder (with trailing backslash). Override with: dotnet build -p:SciaEngineerDir="C:\Program Files\SCIA\Engineer2027\" -->
+    <SciaEngineerDir Condition="'$(SciaEngineerDir)' == ''">C:\Program Files\SCIA\Engineer2027\</SciaEngineerDir>
+    <SciaEngineerDir Condition="!HasTrailingSlash('$(SciaEngineerDir)')">$(SciaEngineerDir)\</SciaEngineerDir>
+    <SciaOpenApiDllDir>$(SciaEngineerDir)OpenAPI_dll\</SciaOpenApiDllDir>
+    <SciaDllCalatravaDir>$(SciaEngineerDir)dll_calatrava\</SciaDllCalatravaDir>
+  </PropertyGroup>
+
+</Project>

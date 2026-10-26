@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnitsNet;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds structural supports for the model

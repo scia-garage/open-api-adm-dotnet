@@ -4,13 +4,12 @@ using ModelExchanger.AnalysisDataModel;
 using ModelExchanger.AnalysisDataModel.Enums;
 using ModelExchanger.AnalysisDataModel.Subtypes;
 using ModelExchanger.AnalysisDataModel.Integration.Bootstrapper;
-using SciaTools.Kernel.ModelExchangerExtension.Models.Exchange;
 
 using System;
 using System.Collections.Generic;
-using SCIA.OpenAPI;
-using SciaTools.AdmToAdm.AdmSignalR.Models.ModelModification;
 using UnitsNet;
+
+using SciaApi.AdmModeling.ModelBuilding;
 
 namespace OpenAPIAndADMDemo.ModelBuilding
 {
@@ -19,16 +18,11 @@ namespace OpenAPIAndADMDemo.ModelBuilding
     /// </summary>
     public class ModelDirector
     {
-        private readonly Structure _model;
-        public ModelDirector(Structure model)
-        {
-            _model = model;
-        }
-
         /// <summary>
         /// Creates a complete structural model using the ADM
         /// </summary>
-        public void BuildCompleteModel()
+        /// <returns>The validated ADM model, ready to be sent to SCIA Engineer</returns>
+        public AnalysisModel BuildCompleteModel()
         {
             AnalysisModel admModel = new AnalysisModel();
             AnalysisDataModelBootstrapper admBootstrapper = new AnalysisDataModelBootstrapper();
@@ -266,15 +260,7 @@ namespace OpenAPIAndADMDemo.ModelBuilding
             }
             admModel.EnforceModelValidity();
 
-            // Add all ADM objects to the Structure
-            foreach (IAnalysisObject admObject in admModel)
-            {
-                ResultOfPartialAddToAnalysisModel result = _model.CreateAdmObject(admObject);
-                if (result.PartialAddResult.Status != AdmChangeStatus.Ok)
-                {
-                    Console.WriteLine($"Error adding object {admObject.Name} to model: {result.PartialAddResult.Errors}");
-                }
-            }
+            return admModel;
         }
     }
 }

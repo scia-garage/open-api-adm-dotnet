@@ -1,4 +1,4 @@
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Base interface for all model builders

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using ModelExchanger.AnalysisDataModel;
 using UnitsNet;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds structural materials for the model

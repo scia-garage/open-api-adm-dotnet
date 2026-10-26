@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>SciaApiThirdPartySciaEngRoundtrip</RootNamespace>
+    <AssemblyName>SciaApiThirdPartySciaEngRoundtrip</AssemblyName>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SciaApi.Infrastructure\SciaApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\SciaApi.AdmModeling\SciaApi.AdmModeling.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CSInfrastructure">
+      <HintPath>$(SciaDllCalatravaDir)CSInfrastructure.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnitsNet">
+      <HintPath>$(SciaDllCalatravaDir)UnitsNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel">
+      <HintPath>$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Contracts">
+      <HintPath>$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.Shared.Models">
+      <HintPath>$(SciaDllCalatravaDir)ModelExchanger.Shared.Models.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper">
+      <HintPath>$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SciaTools.ThirdParty.SDK">
+      <HintPath>$(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SciaTools.ThirdParty.SDK.ADM">
+      <HintPath>$(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.ADM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="ValidateSciaThirdPartyBinaries" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)CSInfrastructure.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)CSInfrastructure.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)UnitsNet.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)UnitsNet.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Contracts.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Contracts.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)ModelExchanger.Shared.Models.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)ModelExchanger.Shared.Models.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.ADM.dll')" Text="Missing SCIA dependency: $(SciaDllCalatravaDir)SciaTools.ThirdParty.SDK.ADM.dll" />
+    <Error Condition="!Exists('$(SciaDllCalatravaDir)SciaTools.ThirdParty.Business.ThirdPartyConnector.exe')" Text="Missing ThirdParty connector: $(SciaDllCalatravaDir)SciaTools.ThirdParty.Business.ThirdPartyConnector.exe" />
+  </Target>
+
+</Project>

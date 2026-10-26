@@ -6,7 +6,7 @@ using ModelExchanger.AnalysisDataModel.Subtypes;
 using System;
 using System.Collections.Generic;
 
-namespace OpenAPIAndADMDemo.ModelBuilding
+namespace SciaApi.AdmModeling.ModelBuilding
 {
     /// <summary>
     /// Builds load combinations for the model

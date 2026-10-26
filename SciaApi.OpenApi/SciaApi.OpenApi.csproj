@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Platforms>AnyCPU</Platforms>
+    <OutputType>Library</OutputType>
+    <AssemblyName>SciaApi.OpenApi</AssemblyName>
+    <RootNamespace>SciaApi.OpenApi</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="CSInfrastructure, Version=1.16.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)CSInfrastructure.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel, Version=1.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Contracts, Version=1.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.Shared.Models, Version=1.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.Shared.Models.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SCIA.OpenAPI, Version=27.0.42.64, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)SCIA.OpenAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SciaTools.AdmToAdm.AdmSignalR.Models, Version=26.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)SciaTools.AdmToAdm.AdmSignalR.Models.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Contracts, Version=26.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.ModelExchangerExtension.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Models, Version=26.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.ModelExchangerExtension.Models.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnitsNet, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SciaOpenApiDllDir)UnitsNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,10 +1,11 @@
 using System;
 using Results64Enums;
 
-using OpenAPIAndADMDemo.Infrastructure;
 using OpenAPIAndADMDemo.Configuration;
 using OpenAPIAndADMDemo.ModelBuilding;
 using OpenAPIAndADMDemo.Results;
+using SciaApi.Infrastructure;
+using SciaApi.OpenApi;
 
 namespace OpenAPIAndADMDemo
 {
@@ -48,9 +49,20 @@ namespace OpenAPIAndADMDemo
                 CleanupInfrastructure();
 
                 Console.WriteLine("Press any key to exit...");
+                WaitForKey();
+            }
+        }
+        /// <summary>
+        /// Waits for a key press unless the input is redirected (non-interactive run)
+        /// </summary>
+        private static void WaitForKey()
+        {
+            if (!Console.IsInputRedirected)
+            {
                 Console.ReadKey();
             }
         }
+
         private static void InitializeInfrastructure()
         {
             _environmentManager = new SciaEnvironmentManager(ModelConstants.SciaVersion);
@@ -87,15 +99,18 @@ namespace OpenAPIAndADMDemo
                     }
 
                     // Create the model with ADM
-                    var modelDirector = new ModelDirector(projectManager.Project.Model);
-                    modelDirector.BuildCompleteModel();
+                    var modelDirector = new ModelDirector();
+                    var admModel = modelDirector.BuildCompleteModel();
+
+                    // Add the ADM objects to the open project
+                    StructureAdmWriter.AddAll(projectManager.Project.Model, admModel);
 
                     // Send the model to SCIA Engineer
                     projectManager.Project.Model.RefreshModel_ToSCIAEngineer();
 
                     Console.WriteLine($"Model sent to SCIA Engineer");
                     Console.WriteLine($"Press any key to run the calculation.");
-                    Console.ReadKey();
+                    WaitForKey();
 
                     // Run calculation
                     Console.WriteLine($"Calculation started...");
@@ -118,7 +133,7 @@ namespace OpenAPIAndADMDemo
                     }
 
                     Console.WriteLine($"Press any key to close SEN.");
-                    Console.ReadKey();
+                    WaitForKey();
                 }
             }
         }

@@ -10,77 +10,77 @@
     <ItemGroup>
         <Reference Include="CSInfrastructure, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\CSInfrastructure.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)CSInfrastructure.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ModelExchanger.AnalysisDataModel, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ModelExchanger.AnalysisDataModel.Contracts, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ModelExchanger.AnalysisDataModel.Implementation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.AnalysisDataModel.Implementation.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Implementation.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ModelExchanger.Shared.Models, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\ModelExchanger.Shared.Models.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)ModelExchanger.Shared.Models.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SCIA.OpenAPI, Version=19.1.2010.64, Culture=neutral, processorArchitecture=AMD64">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SCIA.OpenAPI.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SCIA.OpenAPI.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.AdmToAdm.AdmSignalR.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.AdmToAdm.AdmSignalR.Models.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.AdmToAdm.AdmSignalR.Models.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.Common.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Contracts.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.Common.Contracts.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.Common.Implementation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Implementation.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.Common.Implementation.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.Common.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.Common.Models.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.Common.Models.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Contracts.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.ModelExchangerExtension.Contracts.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Integration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Integration.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.ModelExchangerExtension.Integration.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="SciaTools.Kernel.ModelExchangerExtension.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\SciaTools.Kernel.ModelExchangerExtension.Models.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)SciaTools.Kernel.ModelExchangerExtension.Models.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnitsNet, Version=3.112.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
-            <HintPath>C:\Program Files\SCIA\Engineer25.0\OpenAPI_dll\UnitsNet.dll</HintPath>
+            <HintPath>$(SciaOpenApiDllDir)UnitsNet.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="PresentationCore" />
@@ -107,22 +107,14 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\SciaApi.Infrastructure\SciaApi.Infrastructure.csproj" />
+        <ProjectReference Include="..\SciaApi.AdmModeling\SciaApi.AdmModeling.csproj" />
+        <ProjectReference Include="..\SciaApi.OpenApi\SciaApi.OpenApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Include="Program.cs" />
-        <Compile Include="Infrastructure\SciaEnvironmentManager.cs" />
-        <Compile Include="Infrastructure\SciaProcessManager.cs" />
-        <Compile Include="Infrastructure\ProjectManager.cs" />
-        <Compile Include="Infrastructure\SciaAssemblyResolver.cs" />
         <Compile Include="Configuration\ModelConstants.cs" />
-        <Compile Include="ModelBuilding\IModelBuilder.cs" />
-        <Compile Include="ModelBuilding\ProjectInformationBuilder.cs" />
-        <Compile Include="ModelBuilding\MaterialBuilder.cs" />
-        <Compile Include="ModelBuilding\CrossSectionBuilder.cs" />
-        <Compile Include="ModelBuilding\GeometryBuilder.cs" />
-        <Compile Include="ModelBuilding\SupportBuilder.cs" />
-        <Compile Include="ModelBuilding\HingeBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadCaseBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadBuilder.cs" />
-        <Compile Include="ModelBuilding\LoadCombinationBuilder.cs" />
         <Compile Include="ModelBuilding\ModelDirector.cs" />
         <Compile Include="Results\ResultsManager.cs" />
     </ItemGroup>

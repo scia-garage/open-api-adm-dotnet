@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AssemblyName>SciaApi.AdmModeling</AssemblyName>
+    <RootNamespace>SciaApi.AdmModeling</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="CSInfrastructure">
+      <HintPath>$(SciaOpenApiDllDir)CSInfrastructure.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel">
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Contracts">
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.AnalysisDataModel.Integration.Bootstrapper">
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.AnalysisDataModel.Integration.Bootstrapper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModelExchanger.Shared.Models">
+      <HintPath>$(SciaOpenApiDllDir)ModelExchanger.Shared.Models.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnitsNet">
+      <HintPath>$(SciaOpenApiDllDir)UnitsNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
